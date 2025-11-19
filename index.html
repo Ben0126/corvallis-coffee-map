@@ -737,6 +737,127 @@
                 flex-direction: column;
             }
         }
+
+        /* --- 作者 Footer --- */
+        .author-footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 10px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            font-size: 0.85rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .author-footer:hover {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .author-footer a {
+            color: #6f4e37;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .author-footer a:hover {
+            color: #5a3d2d;
+        }
+
+        .author-footer i {
+            font-size: 1rem;
+        }
+
+        /* 手機版 Footer 優化 */
+        @media (max-width: 768px) {
+            .author-footer {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                justify-content: center;
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+        }
+
+        /* --- 語言切換按鈕 --- */
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            left: 340px;
+            background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            gap: 6px;
+            animation: slideInLeft 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s both;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 2px solid #e0e0e0;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lang-btn:hover {
+            border-color: #6f4e37;
+            background: #f5f5f5;
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, #6f4e37 0%, #5a3d2d 100%);
+            color: white;
+            border-color: #6f4e37;
+            box-shadow: 0 4px 12px rgba(111, 78, 55, 0.3);
+        }
+
+        .lang-btn i {
+            font-size: 1rem;
+        }
+
+        /* 手機版語言切換器 */
+        @media (max-width: 768px) {
+            .language-switcher {
+                top: auto;
+                bottom: 60px;
+                left: 50%;
+                transform: translateX(-50%);
+                gap: 4px;
+                padding: 8px;
+            }
+
+            .lang-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -748,109 +869,130 @@
     </div>
 
     <div class="title-panel">
-        <h1><i class="fas fa-map-marked-alt"></i> Corvallis 美食地圖</h1>
-        <p>探索 Corvallis 最棒的咖啡店與餐廳！選擇右側選單篩選你想要的類別。</p>
-        <div class="subtitle">🎯 點擊地圖標記查看詳細資訊</div>
+        <h1><i class="fas fa-map-marked-alt"></i> <span id="page-title">Corvallis 美食地圖</span></h1>
+        <p id="page-subtitle">探索 Corvallis 最棒的咖啡店與餐廳！選擇右側選單篩選你想要的類別。</p>
+        <div class="subtitle" id="page-hint">🎯 點擊地圖標記查看詳細資訊</div>
+    </div>
+
+    <!-- 語言切換器 -->
+    <div class="language-switcher">
+        <button class="lang-btn active" onclick="switchLanguage('zh')" id="lang-zh">
+            <span>🇹🇼</span>
+            <span>中文</span>
+        </button>
+        <button class="lang-btn" onclick="switchLanguage('en')" id="lang-en">
+            <span>🇺🇸</span>
+            <span>English</span>
+        </button>
     </div>
 
     <div class="filter-control">
-        <h3>主類別</h3>
+        <h3 id="filter-main-title">主類別</h3>
         <button class="filter-btn active" data-category="all" data-type="main" onclick="filterMarkers('all')">
             <i class="fas fa-layer-group"></i>
-            <span>全部顯示</span>
+            <span class="filter-text" data-i18n="filter.all">全部顯示</span>
             <span class="count-badge" id="count-all">0</span>
         </button>
         <button class="filter-btn" data-category="coffee" data-type="main" onclick="filterMarkers('coffee')">
             <i class="fas fa-mug-hot"></i>
-            <span>咖啡店</span>
+            <span class="filter-text" data-i18n="filter.coffee">咖啡店</span>
             <span class="count-badge" id="count-coffee">0</span>
         </button>
         <button class="filter-btn" data-category="restaurant" data-type="main" onclick="filterMarkers('restaurant')">
             <i class="fas fa-utensils"></i>
-            <span>餐廳</span>
+            <span class="filter-text" data-i18n="filter.restaurant">餐廳</span>
             <span class="count-badge" id="count-restaurant">0</span>
         </button>
 
         <div id="coffeeSubcategories" style="display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
-            <h3>咖啡店類型</h3>
+            <h3 id="filter-coffee-title">咖啡店類型</h3>
             <button class="filter-btn" data-category="aesthetic" data-type="coffee" onclick="filterMarkers('aesthetic')">
                 <i class="fas fa-leaf icon-aesthetic"></i>
-                <span>氣氛美感</span>
+                <span class="filter-text" data-i18n="filter.aesthetic">氣氛美感</span>
                 <span class="count-badge" id="count-aesthetic">0</span>
             </button>
             <button class="filter-btn" data-category="study" data-type="coffee" onclick="filterMarkers('study')">
                 <i class="fas fa-laptop icon-study"></i>
-                <span>讀書工作</span>
+                <span class="filter-text" data-i18n="filter.study">讀書工作</span>
                 <span class="count-badge" id="count-study">0</span>
             </button>
             <button class="filter-btn" data-category="nerd" data-type="coffee" onclick="filterMarkers('nerd')">
                 <i class="fas fa-glasses icon-nerd"></i>
-                <span>咖啡行家</span>
+                <span class="filter-text" data-i18n="filter.nerd">咖啡行家</span>
                 <span class="count-badge" id="count-nerd">0</span>
             </button>
             <button class="filter-btn" data-category="community" data-type="coffee" onclick="filterMarkers('community')">
                 <i class="fas fa-users icon-community"></i>
-                <span>溫馨聚會</span>
+                <span class="filter-text" data-i18n="filter.community">溫馨聚會</span>
                 <span class="count-badge" id="count-community">0</span>
             </button>
         </div>
 
         <div id="restaurantSubcategories" style="display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
-            <h3>餐廳類型</h3>
+            <h3 id="filter-restaurant-title">餐廳類型</h3>
             <button class="filter-btn" data-category="mexican" data-type="restaurant" onclick="filterMarkers('mexican')">
                 <i class="fas fa-pepper-hot" style="color: #dc2626;"></i>
-                <span>墨西哥</span>
+                <span class="filter-text" data-i18n="filter.mexican">墨西哥</span>
                 <span class="count-badge" id="count-mexican">0</span>
             </button>
             <button class="filter-btn" data-category="chinese" data-type="restaurant" onclick="filterMarkers('chinese')">
                 <i class="fas fa-dragon" style="color: #dc2626;"></i>
-                <span>中式</span>
+                <span class="filter-text" data-i18n="filter.chinese">中式</span>
                 <span class="count-badge" id="count-chinese">0</span>
             </button>
             <button class="filter-btn" data-category="middle-eastern" data-type="restaurant" onclick="filterMarkers('middle-eastern')">
                 <i class="fas fa-mosque" style="color: #059669;"></i>
-                <span>中東</span>
+                <span class="filter-text" data-i18n="filter.middleEastern">中東</span>
                 <span class="count-badge" id="count-middle-eastern">0</span>
             </button>
             <button class="filter-btn" data-category="korean" data-type="restaurant" onclick="filterMarkers('korean')">
                 <i class="fas fa-fire" style="color: #dc2626;"></i>
-                <span>韓式</span>
+                <span class="filter-text" data-i18n="filter.korean">韓式</span>
                 <span class="count-badge" id="count-korean">0</span>
             </button>
             <button class="filter-btn" data-category="european" data-type="restaurant" onclick="filterMarkers('european')">
                 <i class="fas fa-wine-glass" style="color: #7c3aed;"></i>
-                <span>歐美</span>
+                <span class="filter-text" data-i18n="filter.european">歐美</span>
                 <span class="count-badge" id="count-european">0</span>
             </button>
             <button class="filter-btn" data-category="pizza" data-type="restaurant" onclick="filterMarkers('pizza')">
                 <i class="fas fa-pizza-slice" style="color: #ea580c;"></i>
-                <span>披薩</span>
+                <span class="filter-text" data-i18n="filter.pizza">披薩</span>
                 <span class="count-badge" id="count-pizza">0</span>
             </button>
             <button class="filter-btn" data-category="sandwich" data-type="restaurant" onclick="filterMarkers('sandwich')">
                 <i class="fas fa-hamburger" style="color: #c2410c;"></i>
-                <span>三明治/漢堡</span>
+                <span class="filter-text" data-i18n="filter.sandwich">三明治/漢堡</span>
                 <span class="count-badge" id="count-sandwich">0</span>
             </button>
             <button class="filter-btn" data-category="bar" data-type="restaurant" onclick="filterMarkers('bar')">
                 <i class="fas fa-beer" style="color: #d97706;"></i>
-                <span>酒吧</span>
+                <span class="filter-text" data-i18n="filter.bar">酒吧</span>
                 <span class="count-badge" id="count-bar">0</span>
             </button>
             <button class="filter-btn" data-category="indian" data-type="restaurant" onclick="filterMarkers('indian')">
                 <i class="fas fa-om" style="color: #ea580c;"></i>
-                <span>印度</span>
+                <span class="filter-text" data-i18n="filter.indian">印度</span>
                 <span class="count-badge" id="count-indian">0</span>
             </button>
             <button class="filter-btn" data-category="thai" data-type="restaurant" onclick="filterMarkers('thai')">
                 <i class="fas fa-leaf" style="color: #16a34a;"></i>
-                <span>泰式</span>
+                <span class="filter-text" data-i18n="filter.thai">泰式</span>
                 <span class="count-badge" id="count-thai">0</span>
             </button>
         </div>
     </div>
 
     <div id="map"></div>
+
+    <!-- 作者 Footer -->
+    <div class="author-footer">
+        <span id="author-text">Made by</span>
+        <a href="https://github.com/Ben0126" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-github"></i>
+            Ben0126
+        </a>
+    </div>
 
     <!-- 新增咖啡店/餐廳按鈕 -->
     <button class="add-shop-btn" onclick="openModal()">
@@ -948,6 +1090,280 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <script>
+        // --- 0. 語言系統 (i18n) ---
+        let currentLanguage = localStorage.getItem('preferredLanguage') || 'zh';
+
+        const i18n = {
+            zh: {
+                title: 'Corvallis 美食地圖',
+                subtitle: '探索 Corvallis 最棒的咖啡店與餐廳！選擇右側選單篩選你想要的類別。',
+                hint: '🎯 點擊地圖標記查看詳細資訊',
+                loading: '🗺️ 正在準備美食地圖...',
+                filter: {
+                    mainTitle: '主類別',
+                    coffeeTitle: '咖啡店類型',
+                    restaurantTitle: '餐廳類型',
+                    all: '全部顯示',
+                    coffee: '咖啡店',
+                    restaurant: '餐廳',
+                    aesthetic: '氣氛美感',
+                    study: '讀書工作',
+                    nerd: '咖啡行家',
+                    community: '溫馨聚會',
+                    mexican: '墨西哥',
+                    chinese: '中式',
+                    middleEastern: '中東',
+                    korean: '韓式',
+                    european: '歐美',
+                    pizza: '披薩',
+                    sandwich: '三明治/漢堡',
+                    bar: '酒吧',
+                    indian: '印度',
+                    thai: '泰式'
+                },
+                popup: {
+                    openInMaps: '在 Google Maps 中開啟'
+                },
+                form: {
+                    title: '新增地點',
+                    placeType: '類型',
+                    placeTypeSelect: '請選擇...',
+                    coffee: '咖啡店',
+                    restaurant: '餐廳',
+                    name: '名稱',
+                    namePlaceholder: '例如：Greenhouse Coffee + Plants',
+                    category: '類別',
+                    categorySelect: '請先選擇類型...',
+                    latitude: '緯度 (Latitude)',
+                    latPlaceholder: '44.5643',
+                    latHelp: '可從 Google Maps 取得',
+                    longitude: '經度 (Longitude)',
+                    lngPlaceholder: '-123.2614',
+                    lngHelp: '可從 Google Maps 取得',
+                    icon: '圖示名稱',
+                    iconPlaceholder: '例如：leaf, coffee, book',
+                    iconHelp: '使用 Font Awesome 圖示名稱（不含 fa-）',
+                    description: '詳細描述',
+                    descPlaceholder: '描述咖啡店的特色、氛圍、推薦飲品等...',
+                    features: '特色標籤',
+                    featurePlaceholder: '例如：📸 適合拍照',
+                    addFeature: '新增標籤',
+                    googleMaps: 'Google Maps 連結',
+                    googleMapsPlaceholder: 'https://www.google.com/maps/place/...',
+                    googleMapsHelp: '選填：從 Google Maps 複製分享連結',
+                    cancel: '取消',
+                    submit: '提交',
+                    required: '必填欄位',
+                    categoryOptions: {
+                        aesthetic: '氣氛美感 - 適合拍照、環境優美',
+                        study: '讀書工作 - 插座多、適合學習',
+                        nerd: '咖啡行家 - 專注咖啡品質',
+                        community: '溫馨聚會 - 社區友善、適合聚會',
+                        mexican: '墨西哥料理',
+                        chinese: '中式料理',
+                        middleEastern: '中東料理',
+                        korean: '韓式料理',
+                        european: '歐美料理',
+                        pizza: '披薩',
+                        sandwich: '三明治/漢堡',
+                        bar: '酒吧',
+                        indian: '印度料理',
+                        thai: '泰式料理'
+                    }
+                },
+                author: {
+                    madeBy: 'Made by'
+                }
+            },
+            en: {
+                title: 'Corvallis Food Map',
+                subtitle: 'Discover the best coffee shops and restaurants in Corvallis! Use the filter menu to browse categories.',
+                hint: '🎯 Click map markers for details',
+                loading: '🗺️ Loading food map...',
+                filter: {
+                    mainTitle: 'Main Category',
+                    coffeeTitle: 'Coffee Shop Types',
+                    restaurantTitle: 'Restaurant Types',
+                    all: 'Show All',
+                    coffee: 'Coffee Shops',
+                    restaurant: 'Restaurants',
+                    aesthetic: 'Aesthetic',
+                    study: 'Study/Work',
+                    nerd: 'Coffee Connoisseur',
+                    community: 'Community',
+                    mexican: 'Mexican',
+                    chinese: 'Chinese',
+                    middleEastern: 'Middle Eastern',
+                    korean: 'Korean',
+                    european: 'European/American',
+                    pizza: 'Pizza',
+                    sandwich: 'Sandwich/Burger',
+                    bar: 'Bar',
+                    indian: 'Indian',
+                    thai: 'Thai'
+                },
+                popup: {
+                    openInMaps: 'Open in Google Maps'
+                },
+                form: {
+                    title: 'Add New Place',
+                    placeType: 'Type',
+                    placeTypeSelect: 'Please select...',
+                    coffee: 'Coffee Shop',
+                    restaurant: 'Restaurant',
+                    name: 'Name',
+                    namePlaceholder: 'e.g., Greenhouse Coffee + Plants',
+                    category: 'Category',
+                    categorySelect: 'Please select type first...',
+                    latitude: 'Latitude',
+                    latPlaceholder: '44.5643',
+                    latHelp: 'Get from Google Maps',
+                    longitude: 'Longitude',
+                    lngPlaceholder: '-123.2614',
+                    lngHelp: 'Get from Google Maps',
+                    icon: 'Icon Name',
+                    iconPlaceholder: 'e.g., leaf, coffee, book',
+                    iconHelp: 'Use Font Awesome icon name (without fa-)',
+                    description: 'Description',
+                    descPlaceholder: 'Describe the place, atmosphere, recommended items, etc...',
+                    features: 'Feature Tags',
+                    featurePlaceholder: 'e.g., 📸 Instagrammable',
+                    addFeature: 'Add Tag',
+                    googleMaps: 'Google Maps Link',
+                    googleMapsPlaceholder: 'https://www.google.com/maps/place/...',
+                    googleMapsHelp: 'Optional: Copy share link from Google Maps',
+                    cancel: 'Cancel',
+                    submit: 'Submit',
+                    required: '*',
+                    categoryOptions: {
+                        aesthetic: 'Aesthetic - Great for photos, beautiful ambiance',
+                        study: 'Study/Work - Plenty of outlets, study-friendly',
+                        nerd: 'Coffee Connoisseur - Focus on quality coffee',
+                        community: 'Community - Friendly, great for gatherings',
+                        mexican: 'Mexican Cuisine',
+                        chinese: 'Chinese Cuisine',
+                        middleEastern: 'Middle Eastern Cuisine',
+                        korean: 'Korean Cuisine',
+                        european: 'European/American Cuisine',
+                        pizza: 'Pizza',
+                        sandwich: 'Sandwich/Burger',
+                        bar: 'Bar',
+                        indian: 'Indian Cuisine',
+                        thai: 'Thai Cuisine'
+                    }
+                },
+                author: {
+                    madeBy: 'Made by'
+                }
+            }
+        };
+
+        // 語言切換函數
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('preferredLanguage', lang);
+
+            // 更新按鈕狀態
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+
+            // 更新所有文本
+            updateAllTexts();
+        }
+
+        // 更新所有文本
+        function updateAllTexts() {
+            const t = i18n[currentLanguage];
+
+            // 更新頁面標題和提示
+            document.getElementById('page-title').textContent = t.title;
+            document.getElementById('page-subtitle').textContent = t.subtitle;
+            document.getElementById('page-hint').textContent = t.hint;
+            document.querySelector('.loading-text').textContent = t.loading;
+
+            // 更新篩選標題
+            document.getElementById('filter-main-title').textContent = t.filter.mainTitle;
+            document.getElementById('filter-coffee-title').textContent = t.filter.coffeeTitle;
+            document.getElementById('filter-restaurant-title').textContent = t.filter.restaurantTitle;
+
+            // 更新所有篩選按鈕
+            document.querySelectorAll('[data-i18n]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n');
+                const keys = key.split('.');
+                let value = t;
+                keys.forEach(k => value = value[k]);
+                elem.textContent = value;
+            });
+
+            // 更新作者文本
+            document.getElementById('author-text').textContent = t.author.madeBy;
+
+            // 更新表單
+            updateFormTexts();
+
+            // 更新頁面標題 (瀏覽器標籤)
+            document.title = t.title + ' 🗺️';
+        }
+
+        // 更新表單文本
+        function updateFormTexts() {
+            const t = i18n[currentLanguage].form;
+
+            // 表單標題
+            document.querySelector('.modal-header h2').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${t.title}`;
+
+            // 更新表單字段
+            document.querySelector('label[for="placeType"]').innerHTML = `${t.placeType} <span style="color: red;">*</span>`;
+            document.querySelector('#placeType option[value=""]').textContent = t.placeTypeSelect;
+            document.querySelector('#placeType option[value="coffee"]').textContent = t.coffee;
+            document.querySelector('#placeType option[value="restaurant"]').textContent = t.restaurant;
+
+            document.querySelector('label[for="shopName"]').innerHTML = `${t.name} <span style="color: red;">*</span>`;
+            document.getElementById('shopName').placeholder = t.namePlaceholder;
+
+            document.querySelector('label[for="category"]').innerHTML = `${t.category} <span style="color: red;">*</span>`;
+
+            document.querySelector('label[for="latitude"]').innerHTML = `${t.latitude} <span style="color: red;">*</span>`;
+            document.getElementById('latitude').placeholder = t.latPlaceholder;
+            document.querySelectorAll('.form-help')[0].textContent = t.latHelp;
+
+            document.querySelector('label[for="longitude"]').innerHTML = `${t.longitude} <span style="color: red;">*</span>`;
+            document.getElementById('longitude').placeholder = t.lngPlaceholder;
+            document.querySelectorAll('.form-help')[1].textContent = t.lngHelp;
+
+            document.querySelector('label[for="icon"]').innerHTML = `${t.icon} <span style="color: red;">*</span>`;
+            document.getElementById('icon').placeholder = t.iconPlaceholder;
+            document.querySelectorAll('.form-help')[2].textContent = t.iconHelp;
+
+            document.querySelector('label[for="description"]').innerHTML = `${t.description} <span style="color: red;">*</span>`;
+            document.getElementById('description').placeholder = t.descPlaceholder;
+
+            document.querySelector('.form-group label:nth-of-type(7)').textContent = t.features;
+            document.querySelectorAll('.feature-input').forEach(input => {
+                input.placeholder = t.featurePlaceholder;
+            });
+            document.querySelector('.add-feature-btn').innerHTML = `<i class="fas fa-plus"></i> ${t.addFeature}`;
+
+            document.querySelector('label[for="googleMapsLink"]').textContent = t.googleMaps;
+            document.getElementById('googleMapsLink').placeholder = t.googleMapsPlaceholder;
+            document.querySelectorAll('.form-help')[3].textContent = t.googleMapsHelp;
+
+            document.querySelector('.btn-secondary').textContent = t.cancel;
+            document.querySelector('.btn-primary').innerHTML = `<i class="fas fa-check"></i> ${t.submit}`;
+
+            // 更新類別選項（如果已選擇類型）
+            const placeType = document.getElementById('placeType').value;
+            if (placeType) {
+                updateCategoryOptions();
+            }
+        }
+
+        // 頁面載入時初始化語言
+        document.addEventListener('DOMContentLoaded', function() {
+            // 設置初始語言
+            switchLanguage(currentLanguage);
+        });
+
         // --- 1. 詳細店家資料庫 ---
         const defaultPlaces = [
             // --- ☕ 咖啡店 (Coffee Shops) ---
@@ -1319,7 +1735,8 @@
 
         function createPopupContent(place) {
             const tagsHtml = place.features.map(f => `<span class="feature-tag">${f}</span>`).join('');
-            
+            const t = i18n[currentLanguage];
+
             return `
                 <div class="popup-header">
                     <i class="fas fa-${place.icon}"></i>
@@ -1330,7 +1747,7 @@
                     <div class="popup-desc">${place.desc}</div>
                     <a href="${place.link}" target="_blank" class="popup-btn">
                         <i class="fas fa-location-arrow"></i>
-                        <span>在 Google Maps 中開啟</span>
+                        <span>${t.popup.openInMaps}</span>
                     </a>
                 </div>
             `;
@@ -1482,29 +1899,30 @@
             const placeTypeSelect = document.getElementById('placeType');
             const categorySelect = document.getElementById('category');
             const placeType = placeTypeSelect.value;
+            const t = i18n[currentLanguage].form;
 
             // 清空現有選項
-            categorySelect.innerHTML = '<option value="">請選擇...</option>';
+            categorySelect.innerHTML = `<option value="">${t.categorySelect}</option>`;
 
             if (placeType === 'coffee') {
                 categorySelect.innerHTML += `
-                    <option value="aesthetic">氣氛美感 - 適合拍照、環境優美</option>
-                    <option value="study">讀書工作 - 插座多、適合學習</option>
-                    <option value="nerd">咖啡行家 - 專注咖啡品質</option>
-                    <option value="community">溫馨聚會 - 社區友善、適合聚會</option>
+                    <option value="aesthetic">${t.categoryOptions.aesthetic}</option>
+                    <option value="study">${t.categoryOptions.study}</option>
+                    <option value="nerd">${t.categoryOptions.nerd}</option>
+                    <option value="community">${t.categoryOptions.community}</option>
                 `;
             } else if (placeType === 'restaurant') {
                 categorySelect.innerHTML += `
-                    <option value="mexican">墨西哥料理</option>
-                    <option value="chinese">中式料理</option>
-                    <option value="middle-eastern">中東料理</option>
-                    <option value="korean">韓式料理</option>
-                    <option value="european">歐美料理</option>
-                    <option value="pizza">披薩</option>
-                    <option value="sandwich">三明治/漢堡</option>
-                    <option value="bar">酒吧</option>
-                    <option value="indian">印度料理</option>
-                    <option value="thai">泰式料理</option>
+                    <option value="mexican">${t.categoryOptions.mexican}</option>
+                    <option value="chinese">${t.categoryOptions.chinese}</option>
+                    <option value="middle-eastern">${t.categoryOptions.middleEastern}</option>
+                    <option value="korean">${t.categoryOptions.korean}</option>
+                    <option value="european">${t.categoryOptions.european}</option>
+                    <option value="pizza">${t.categoryOptions.pizza}</option>
+                    <option value="sandwich">${t.categoryOptions.sandwich}</option>
+                    <option value="bar">${t.categoryOptions.bar}</option>
+                    <option value="indian">${t.categoryOptions.indian}</option>
+                    <option value="thai">${t.categoryOptions.thai}</option>
                 `;
             }
         }
@@ -1546,9 +1964,10 @@
         function addFeatureInput() {
             const container = document.getElementById('featuresContainer');
             const newRow = document.createElement('div');
+            const t = i18n[currentLanguage].form;
             newRow.className = 'feature-input-row';
             newRow.innerHTML = `
-                <input type="text" placeholder="例如：📸 適合拍照" class="feature-input">
+                <input type="text" placeholder="${t.featurePlaceholder}" class="feature-input">
                 <button type="button" onclick="removeFeature(this)">
                     <i class="fas fa-trash"></i>
                 </button>
