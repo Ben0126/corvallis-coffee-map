@@ -950,7 +950,7 @@
     <script>
         // --- 1. 詳細店家資料庫 ---
         const defaultPlaces = [
-            // 咖啡店
+            // --- ☕ 咖啡店 (Coffee Shops) ---
             {
                 id: 1,
                 name: "Greenhouse Coffee + Plants",
@@ -959,8 +959,8 @@
                 lat: 44.5643,
                 lng: -123.2614,
                 icon: "leaf",
-                desc: "被植物包圍的溫室咖啡廳,光線非常充足,心情會變很好。店內同時販售精選植栽,讓你可以把綠意帶回家。",
-                features: ["📸 適合拍照", "🌱 有賣植物", "☀️ 採光佳"],
+                desc: "被植物包圍的溫室咖啡廳，光線非常充足。店內同時販售精選植栽，氛圍清新自然，是放鬆心情的絕佳去處。",
+                features: ["📸 適合拍照", "🌱 有賣植物", "☀️ 採光佳", "🍃 植栽販售"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJi3lah6xBwFQRnmEChZrqk1g"
             },
             {
@@ -971,8 +971,8 @@
                 lat: 44.5629,
                 lng: -123.2601,
                 icon: "seedling",
-                desc: "前身為 Tried & True。現代工業風設計,專注於永續農業與高品質手沖。每一杯咖啡都是藝術品。",
-                features: ["☕ 手沖咖啡", "🧱 工業風", "🌍 永續環保"],
+                desc: "前身為 Tried & True。現代工業風設計，專注於永續農業與高品質手沖。每一杯咖啡都是藝術品，注重產地與風味。",
+                features: ["☕ 手沖咖啡", "🧱 工業風", "🌍 永續環保", "🥯 輕食甜點"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJgwQZuutAwFQR_hYeRaEI8Tk"
             },
             {
@@ -983,8 +983,8 @@
                 lat: 44.5677,
                 lng: -123.2738,
                 icon: "guitar",
-                desc: "校區旁的龐克搖滾風格店。開得比較晚,適合需要特殊靈感的時候。有機燕麥粥和貝果也值得一試。",
-                features: ["🎸 搖滾Vibe", "🦉 開到較晚", "🥣 有機燕麥粥"],
+                desc: "校區旁的龐克搖滾風格店。營業時間較晚，適合需要特殊靈感或熬夜讀書的時候。有機燕麥粥和貝果是學生最愛。",
+                features: ["🎸 搖滾Vibe", "🦉 開到較晚", "🥣 有機燕麥粥", "🎓 近校園"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJZ0Gk571AwFQR3i_43l-BJkI"
             },
             {
@@ -995,8 +995,8 @@
                 lat: 44.5778,
                 lng: -123.2748,
                 icon: "book",
-                desc: "空間寬敞、插座多,是許多 OSU 學生趕論文的秘密基地。自家烘焙的點心也很受歡迎。",
-                features: ["💻 插座多", "📚 適合讀書", "🥯 自家烘焙點心"],
+                desc: "空間寬敞、座位多且插座充足，是許多 OSU 學生趕論文的秘密基地。自家烘焙的點心和三明治也很受歡迎。",
+                features: ["💻 插座多", "📚 適合讀書", "🥪 三明治", "🚗 停車方便"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJK8GsEZxAwFQRwjxaGThm9lU"
             },
             {
@@ -1007,8 +1007,8 @@
                 lat: 44.5650,
                 lng: -123.2595,
                 icon: "coffee",
-                desc: "數十年老店,專注於販售新鮮烘焙豆與茶葉,行家必去。一走進去就會被豆子的香氣包圍。",
-                features: ["🛍️ 買豆首選", "👃 香氣四溢", "🍵 茶葉選擇多"],
+                desc: "數十年老店，專注於販售新鮮烘焙豆與茶葉，行家必去。一走進去就會被濃郁的豆子香氣包圍。",
+                features: ["🛍️ 買豆首選", "👃 香氣四溢", "🍵 茶葉專賣", "📜 老字號"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJu3p_dutAwFQRnqeobhWXnuU"
             },
             {
@@ -1019,8 +1019,8 @@
                 lat: 44.5501,
                 lng: -123.3130,
                 icon: "music",
-                desc: "像是社區客廳一樣溫暖,常有現場音樂演奏與藝術展覽。在這裡你會遇到很多有趣的本地人。",
-                features: ["🎨 藝術展覽", "🎵 現場音樂", "🛋️ 沙發區"],
+                desc: "像是社區客廳一樣溫暖，常有現場音樂演奏與藝術展覽。位於 Philomath 方向，是一個遠離塵囂的溫馨角落。",
+                features: ["🎨 藝術展覽", "🎵 現場音樂", "🛋️ 沙發區", "🏘️ 社區感"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJhffwvEBHwFQRLy-xUiAV0GY"
             },
             {
@@ -1031,197 +1031,197 @@
                 lat: 44.5600,
                 lng: -123.2622,
                 icon: "bread-slice",
-                desc: "麵包是本體!使用在地食材製作的早午餐非常受歡迎。豆蔻拿鐵搭配剛出爐的麵包是絕配。",
-                features: ["🥐 超強麵包", "🥪 早午餐", "🏘️ 戶外座位"],
+                desc: "麵包是本體！使用在地食材製作的早午餐非常受歡迎。豆蔻拿鐵搭配剛出爐的麵包是絕配。有戶外座位。",
+                features: ["🥐 超強麵包", "🥪 早午餐", "🌞 戶外座位", "🥬 在地食材"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJww_2m3VBwFQRfyir2HHDTsE"
             },
 
-            // 餐廳 - 墨西哥料理
+            // --- 🇲🇽 餐廳 - 墨西哥料理 (Mexican) ---
             {
                 id: 101,
                 name: "Oscar's Tacos and Cantina",
                 type: "restaurant",
                 category: "mexican",
-                lat: 44.5640,
-                lng: -123.2625,
+                lat: 44.5922,
+                lng: -123.2523,
                 icon: "pepper-hot",
-                desc: "高品質、美味且份量充足的墨西哥料理。招牌推薦：Gobernador 墨西哥捲餅、Carnitas 墨西哥捲餅、玉米片 (Nachos)。甜點有絕對美味的法蘭 (Flan)。輕鬆休閒，員工友善，服務出色。",
-                features: ["⭐ 4.9 星", "🌮 墨西哥捲餅", "🍮 法蘭甜點", "份量充足"],
-                link: "#"
+                desc: "高品質、美味且份量充足的墨西哥料理。Gobernador 捲餅和 Carnitas 是必點。甜點法蘭 (Flan) 絕對不能錯過。",
+                features: ["⭐ 4.9 星", "🌮 必吃捲餅", "🍮 法蘭甜點", "🚗 停車方便"],
+                link: "https://maps.google.com/?q=Oscar's+Tacos+and+Cantina+Corvallis"
             },
             {
                 id: 102,
                 name: "El charro negro",
                 type: "restaurant",
                 category: "mexican",
-                lat: 44.5650,
-                lng: -123.2640,
+                lat: 44.5803,
+                lng: -123.2601,
                 icon: "pepper-hot",
-                desc: "正宗的墨西哥風味，份量極大 (一份足夠 1.5 到 2 餐)。招牌推薦：Quesabirria (搭配湯汁 Consommé)、Pollo Loco。提供美味的無酒精覆盆子瑪格麗特。大學生可享 8 折優惠！",
-                features: ["⭐ 4.7 星", "🎓 大學生 8 折", "🥘 Quesabirria", "份量超大"],
-                link: "#"
+                desc: "正宗墨西哥風味，份量極大！招牌推薦 Quesabirria (沾肉湯吃) 和 Pollo Loco。大學生出示證件常有優惠。",
+                features: ["⭐ 4.7 星", "🥘 Quesabirria", "🍹 無酒精特調", "🎓 學生優惠"],
+                link: "https://maps.google.com/?q=El+Charro+Negro+Corvallis"
             },
 
-            // 餐廳 - 中式料理
+            // --- 🇨🇳 餐廳 - 中式料理 (Chinese) ---
             {
                 id: 103,
-                name: "Tian Fu Noodle / DIY Hotpot (天府麵食)",
+                name: "Tian Fu Noodle (天府麵食)",
                 type: "restaurant",
                 category: "chinese",
-                lat: 44.5670,
-                lng: -123.2700,
+                lat: 44.5675,
+                lng: -123.2724,
                 icon: "fire",
-                desc: "氣氛溫馨的中式餐廳，主打麵食和創意的自助火鍋。提供客製化的「DIY 自助火鍋」，麻醬湯底被顧客譽為「全場焦點」。手工水餃和擔擔麵也深受喜愛。",
-                features: ["⭐ 4.8 星", "🍜 手工麵食", "🍲 自助火鍋", "麻醬湯底"],
-                link: "https://www.google.com/maps/search/?api=1&query=Tian+Fu+Noodle+1425+NW+Monroe+Ave+Corvallis"
+                desc: "位於校園旁的溫馨小店。主打手工麵食和創意「DIY 個人火鍋」，麻醬湯底非常濃郁。擔擔麵和水餃也是一絕。",
+                features: ["⭐ 4.8 星", "🍜 手工麵食", "🍲 個人火鍋", "🎓 近校園"],
+                link: "http://www.tianfudiyhotpot.com/"
             },
 
-            // 餐廳 - 中東料理
+            // --- 🕌 餐廳 - 中東料理 (Middle Eastern) ---
             {
                 id: 104,
-                name: "Khalo Naser Syrian Cuisine & Lounge",
+                name: "Khalo Naser Syrian Cuisine",
                 type: "restaurant",
                 category: "middle-eastern",
-                lat: 44.5634,
-                lng: -123.2618,
+                lat: 44.5651,
+                lng: -123.2586,
                 icon: "mosque",
-                desc: "家庭經營的敘利亞/中東餐廳。招牌菜：巴巴加努什、羊肉串捲、雞肉沙威瑪拼盤、阿拉伯沙威瑪和羊膝。氛圍輕鬆舒適時尚，員工非常友好，讓人感覺像被邀請到溫暖的家庭作客。",
-                features: ["⭐ 4.8 星", "🥙 沙威瑪", "🍖 羊肉串", "家庭經營"],
-                link: "https://www.google.com/maps/search/?api=1&query=Khalo+Naser+115+NW+Jackson+Ave+Corvallis"
+                desc: "家庭經營的敘利亞餐廳，氛圍優雅溫馨。必點：羊小腿、雞肉沙威瑪、以及口感滑順的鷹嘴豆泥。待客如親。",
+                features: ["⭐ 4.8 星", "🥙 沙威瑪", "🍖 燉羊肉", "🛋️ 氣氛極佳"],
+                link: "http://www.khalonaser.com/"
             },
 
-            // 餐廳 - 韓式料理
+            // --- 🇰🇷 餐廳 - 韓式料理 (Korean) ---
             {
                 id: 105,
                 name: "K-BBQ EXPRESS",
                 type: "restaurant",
                 category: "korean",
-                lat: 44.5710,
-                lng: -123.2730,
+                lat: 44.5690,
+                lng: -123.2784,
                 icon: "fire",
-                desc: "提供高品質、快速服務的韓式燒烤快餐店。顧客特別推薦烤肉拌飯 (Bulgogi Bibimbap) 和韓式飯捲 (Kimbap)。對於趕時間的學生和上班族來說，午餐特餐非常理想。老闆非常親切。",
-                features: ["⭐ 4.6 星", "🍱 烤肉拌飯", "🍙 韓式飯捲", "快速服務"],
-                link: "https://www.google.com/maps/search/?api=1&query=K-BBQ+EXPRESS+2461+NW+Monroe+Ave+Corvallis"
+                desc: "校園附近的超人氣韓式快餐。烤肉拌飯 (Bibimbap) 和韓式飯捲 (Kimbap) 是趕課學生的最愛。老闆非常親切。",
+                features: ["⭐ 4.6 星", "🍱 烤肉拌飯", "🍙 飯捲", "⚡ 出餐快"],
+                link: "https://www.kbbqexpressor.com/"
             },
 
-            // 餐廳 - 歐美料理
+            // --- 🇪🇺 餐廳 - 歐美料理 (European/American) ---
             {
                 id: 106,
                 name: "Caves Corvallis",
                 type: "restaurant",
                 category: "european",
-                lat: 44.5621,
-                lng: -123.2582,
+                lat: 44.5622,
+                lng: -123.2623,
                 icon: "wine-glass",
-                desc: "舒適的小酒館，提供結合歐洲和美式風味的時令菜單，同時提供全球精釀啤酒。菜餚經過精心烹調，風味獨特且平衡。舒適時尚，提供早午餐、午餐和晚餐，可以預訂。",
-                features: ["⭐ 4.6 星", "🍷 精釀啤酒", "🍽️ 時令菜單", "戶外座位"],
-                link: "https://www.google.com/maps/search/?api=1&query=Caves+Corvallis+308+SW+3rd+St+Corvallis"
+                desc: "舒適的酒窖餐廳，提供結合歐美風味的時令菜單。早午餐非常受歡迎，擁有豐富的精釀啤酒單和戶外座位。",
+                features: ["⭐ 4.6 星", "🍷 精釀啤酒", "🍳 早午餐", "🌞 戶外座位"],
+                link: "http://cavescorvallis.com/"
             },
 
-            // 餐廳 - 披薩
+            // --- 🍕 餐廳 - 披薩 (Pizza) ---
             {
                 id: 107,
                 name: "Cirello's Pizza",
                 type: "restaurant",
                 category: "pizza",
-                lat: 44.5655,
-                lng: -123.2615,
+                lat: 44.5892,
+                lng: -123.2564,
                 icon: "pizza-slice",
-                desc: "紐約式披薩。份量慷慨，餡料豐富，餅皮和配料質量高。招牌推薦：西西里披薩 (Sicilian)，喜歡大蒜的話可以選擇烤大蒜口味。經典的 1980 年代披薩店體驗，舒適休閒。",
-                features: ["⭐ 4.4 星", "🍕 紐約式", "🧄 烤大蒜", "份量慷慨"],
-                link: "#"
+                desc: "位於 Circle Blvd 的經典紐約式披薩。餅皮酥脆，推薦西西里披薩 (Sicilian)。裝潢復古，很有 80 年代風格。",
+                features: ["⭐ 4.4 星", "🍕 紐約披薩", "🧄 烤大蒜", "📺 復古風"],
+                link: "http://cirellospizza.com/"
             },
             {
                 id: 108,
-                name: "American Dream Pizza Downtown",
+                name: "American Dream Pizza (Downtown)",
                 type: "restaurant",
                 category: "pizza",
-                lat: 44.5630,
-                lng: -123.2590,
+                lat: 44.5628,
+                lng: -123.2608,
                 icon: "pizza-slice",
-                desc: "以整份或單片販售的厚片披薩聞名，提供多種素食選項和無麩質餅皮。時髦、休閒且充滿活力，設有獨立酒吧區，夏季還有屋頂座位。許多人稱讚它是「Willamette Valley 最棒的披薩」。",
-                features: ["⭐ 4.3 星", "🍕 厚片披薩", "🌱 素食選項", "🏙️ 屋頂座位"],
-                link: "#"
+                desc: "Corvallis 的地標級披薩店。厚片披薩可單片購買，甚至有屋頂座位區！提供多種在地啤酒，氣氛超High。",
+                features: ["⭐ 4.3 星", "🍕 單片販售", "🏙️ 屋頂座位", "🍺 在地啤酒"],
+                link: "http://adpizza.com/"
             },
 
-            // 餐廳 - 三明治/漢堡
+            // --- 🍔 餐廳 - 三明治/漢堡 (Sandwich/Burger) ---
             {
                 id: 109,
-                name: "Swan Dive Sandwiches + Bar",
+                name: "Swan Dive Sandwiches",
                 type: "restaurant",
                 category: "sandwich",
-                lat: 44.5625,
-                lng: -123.2605,
+                lat: 44.5635,
+                lng: -123.2634,
                 icon: "bread-slice",
-                desc: "以高品質的三明治聞名，所有食材超級新鮮、在地採購，麵包更是自家製作，口味組合富有創意。氛圍極佳，服務出色，員工熱情好客。顧客評論：「麵包是主角」、「Corvallis 最棒的三明治」。",
-                features: ["⭐ 4.8 星", "🥖 自家麵包", "🥗 在地食材", "創意口味"],
-                link: "#"
+                desc: "在地評價極高的三明治店。自家烘焙的麵包是靈魂，搭配新鮮在地食材。被譽為 Corvallis 最好吃的三明治。",
+                features: ["⭐ 4.8 星", "🥖 自家麵包", "🥗 在地食材", "🍸 特色調酒"],
+                link: "https://swandivecorvallis.com/"
             },
             {
                 id: 110,
-                name: "Bo & Vine Burger Corvallis",
+                name: "Bo & Vine Burger",
                 type: "restaurant",
                 category: "sandwich",
-                lat: 44.5645,
-                lng: -123.2610,
+                lat: 44.5648,
+                lng: -123.2609,
                 icon: "hamburger",
-                desc: "專門的美食手工漢堡店。特色是獨創的配料，如培根果醬和櫻桃哈瓦那辣椒醬。提供客製化醬料吧和素食選項 (如豆類漢堡)。氛圍隨性時髦，總是人氣很旺。",
-                features: ["⭐ 4.4 星", "🍔 手工漢堡", "🥓 培根果醬", "客製醬料"],
-                link: "#"
+                desc: "創意手工漢堡店。推薦嘗試花生醬培根漢堡或櫻桃哈瓦那辣醬。擁有豐富的客製化醬料吧台 (Sauce Bar)。",
+                features: ["⭐ 4.4 星", "🍔 手工漢堡", "🍶 醬料吧", "🍟 堆疊薯條"],
+                link: "https://boandvine.com/"
             },
 
-            // 餐廳 - 酒吧
+            // --- 🍺 餐廳 - 酒吧 (Bar) ---
             {
                 id: 111,
                 name: "Beer:30",
                 type: "restaurant",
                 category: "bar",
-                lat: 44.5540,
-                lng: -123.2550,
+                lat: 44.5474,
+                lng: -123.2651,
                 icon: "beer",
-                desc: "適合放鬆休閒的社區酒吧，專門提供精釀啤酒。氣氛輕鬆悠閒，有超過 30 種生啤酒和蘋果酒輪流供應，精選了許多地區性的優質啤酒。價格非常合理。",
-                features: ["⭐ 4.8 星", "🍺 30+ 生啤", "🍎 蘋果酒", "價格合理"],
-                link: "https://www.google.com/maps/search/?api=1&query=Beer:30+1835+SE+3rd+St+Corvallis"
+                desc: "位於南邊的精釀啤酒吧。擁有超過 30 種輪替生啤，價格親民。這裡氣氛悠閒，適合和朋友聊天看球賽。",
+                features: ["⭐ 4.8 星", "🍺 30+ 生啤", "📺 運動轉播", "💰 價格親民"],
+                link: "https://maps.google.com/?q=Beer:30+Corvallis"
             },
             {
                 id: 112,
                 name: "Squirrels Tavern",
                 type: "restaurant",
                 category: "bar",
-                lat: 44.5618,
-                lng: -123.2580,
+                lat: 44.5640,
+                lng: -123.2602,
                 icon: "beer",
-                desc: "歷史悠久、在科瓦利斯非常著名的酒館。輕鬆的酒吧氛圍、古怪的裝飾、撞球桌和彈珠機。美味的酒吧食物，例如培根起司漢堡和炸薯條。服務友善，當地老字號。",
-                features: ["⭐ 4.6 星", "🎱 撞球桌", "🍔 酒吧食物", "當地老店"],
-                link: "https://www.google.com/maps/search/?api=1&query=Squirrels+Tavern+100+SW+2nd+St+Corvallis"
+                desc: "Corvallis 最具代表性的歷史老酒館。有撞球桌、閣樓座位和美味的炸薯條。是體驗當地文化的最佳地點。",
+                features: ["⭐ 4.6 星", "🎱 撞球桌", "🍟 必點薯條", "🏛️ 歷史老店"],
+                link: "http://www.squirrelstavern.com/"
             },
 
-            // 餐廳 - 印度料理
+            // --- 🍛 餐廳 - 印度料理 (Indian) ---
             {
                 id: 113,
-                name: "Royal India Cuisine - Corvallis",
+                name: "Royal India Cuisine",
                 type: "restaurant",
                 category: "indian",
-                lat: 44.5740,
-                lng: -123.2690,
+                lat: 44.5860,
+                lng: -123.2553,
                 icon: "om",
-                desc: "提供道地印度風味的餐廳，以風味濃郁的菜餚、無可挑剔的服務和舒適休閒的氛圍聞名。招牌菜：羊肉咖哩、鷹嘴豆咖哩 (Chana Masala)、烤餅 (Naan)、蔬菜庫爾瑪。提供素食和純素食選項。",
-                features: ["⭐ 4.6 星", "🍛 咖哩", "🫓 烤餅 Naan", "素食選項"],
-                link: "https://www.google.com/maps/search/?api=1&query=Royal+India+Cuisine+1857+NW+9th+St+Corvallis"
+                desc: "位於北邊的道地印度料理，下午有提供自助餐。羊肉咖哩和蔬菜庫爾瑪非常受歡迎。烤餅 (Naan) 都是現烤的。",
+                features: ["⭐ 4.6 星", "🍛 咖哩", "🍽️ 午間自助餐", "🌱 素食友善"],
+                link: "https://www.royalindiacorvallis.com/"
             },
 
-            // 餐廳 - 泰式料理
+            // --- 🇹🇭 餐廳 - 泰式料理 (Thai) ---
             {
                 id: 114,
                 name: "Tarn Tip Thai Cuisine",
                 type: "restaurant",
                 category: "thai",
-                lat: 44.5720,
-                lng: -123.2740,
+                lat: 44.5690,
+                lng: -123.2798,
                 icon: "leaf",
-                desc: "休閒舒適的小餐館，提供泰式家常菜，包括素食選項。招牌菜：香脆羅勒鴨、酪梨咖哩、泰式烤雞、鳳梨炒飯、香脆豬五花。優質快速的服務，美味的餐點而受到高度讚揚。",
-                features: ["⭐ 4.6 星", "🦆 羅勒鴨", "🥑 酪梨咖哩", "素食選項"],
-                link: "https://www.google.com/maps/search/?api=1&query=Tarn+Tip+Thai+2535+NW+Monroe+Ave+Corvallis"
+                desc: "Monroe 街上的溫馨泰式小館。香脆羅勒鴨和酪梨咖哩是必點招牌。服務親切快速，價格也很實惠。",
+                features: ["⭐ 4.6 星", "🦆 羅勒鴨", "🥑 酪梨咖哩", "⚡ 服務快速"],
+                link: "http://corvallismenus.com/tarntip_thai_menu.pdf"
             }
         ];
 
