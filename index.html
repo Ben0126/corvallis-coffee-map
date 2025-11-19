@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Corvallis Coffee Map Ultimate ☕</title>
+    <title>Corvallis 美食地圖 - 咖啡店與餐廳 🗺️</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -301,17 +301,22 @@
         }
 
         /* 不同類別的 marker 顏色 */
+        /* 咖啡店類別 */
         .marker-aesthetic { border-color: #2c8e3c; }
         .marker-aesthetic i { color: #2c8e3c; }
-        
+
         .marker-study { border-color: #e67e22; }
         .marker-study i { color: #e67e22; }
-        
+
         .marker-nerd { border-color: #9b59b6; }
         .marker-nerd i { color: #9b59b6; }
-        
+
         .marker-community { border-color: #e74c3c; }
         .marker-community i { color: #e74c3c; }
+
+        /* 餐廳類別 - 使用不同的顏色 */
+        .marker-restaurant { border-color: #dc2626; }
+        .marker-restaurant i { color: #dc2626; }
 
         /* 動畫優化 */
         @keyframes slideInLeft { 
@@ -739,47 +744,115 @@
     <!-- Loading 動畫 -->
     <div class="loading-overlay">
         <div class="loading-spinner"></div>
-        <div class="loading-text">☕ 正在準備咖啡地圖...</div>
+        <div class="loading-text">🗺️ 正在準備美食地圖...</div>
     </div>
 
     <div class="title-panel">
-        <h1><i class="fas fa-mug-hot"></i> Corvallis Coffee Map</h1>
-        <p>探索 Corvallis 最棒的咖啡店！選擇右側選單篩選你的咖啡心情。</p>
+        <h1><i class="fas fa-map-marked-alt"></i> Corvallis 美食地圖</h1>
+        <p>探索 Corvallis 最棒的咖啡店與餐廳！選擇右側選單篩選你想要的類別。</p>
         <div class="subtitle">🎯 點擊地圖標記查看詳細資訊</div>
     </div>
 
     <div class="filter-control">
-        <h3>篩選類別</h3>
-        <button class="filter-btn active" data-category="all" onclick="filterMarkers('all')">
+        <h3>主類別</h3>
+        <button class="filter-btn active" data-category="all" data-type="main" onclick="filterMarkers('all')">
             <i class="fas fa-layer-group"></i>
             <span>全部顯示</span>
-            <span class="count-badge" id="count-all">7</span>
+            <span class="count-badge" id="count-all">0</span>
         </button>
-        <button class="filter-btn" data-category="aesthetic" onclick="filterMarkers('aesthetic')">
-            <i class="fas fa-leaf icon-aesthetic"></i>
-            <span>氣氛美感</span>
-            <span class="count-badge" id="count-aesthetic">2</span>
+        <button class="filter-btn" data-category="coffee" data-type="main" onclick="filterMarkers('coffee')">
+            <i class="fas fa-mug-hot"></i>
+            <span>咖啡店</span>
+            <span class="count-badge" id="count-coffee">0</span>
         </button>
-        <button class="filter-btn" data-category="study" onclick="filterMarkers('study')">
-            <i class="fas fa-laptop icon-study"></i>
-            <span>讀書工作</span>
-            <span class="count-badge" id="count-study">2</span>
+        <button class="filter-btn" data-category="restaurant" data-type="main" onclick="filterMarkers('restaurant')">
+            <i class="fas fa-utensils"></i>
+            <span>餐廳</span>
+            <span class="count-badge" id="count-restaurant">0</span>
         </button>
-        <button class="filter-btn" data-category="nerd" onclick="filterMarkers('nerd')">
-            <i class="fas fa-glasses icon-nerd"></i>
-            <span>咖啡行家</span>
-            <span class="count-badge" id="count-nerd">1</span>
-        </button>
-        <button class="filter-btn" data-category="community" onclick="filterMarkers('community')">
-            <i class="fas fa-users icon-community"></i>
-            <span>溫馨聚會</span>
-            <span class="count-badge" id="count-community">2</span>
-        </button>
+
+        <div id="coffeeSubcategories" style="display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+            <h3>咖啡店類型</h3>
+            <button class="filter-btn" data-category="aesthetic" data-type="coffee" onclick="filterMarkers('aesthetic')">
+                <i class="fas fa-leaf icon-aesthetic"></i>
+                <span>氣氛美感</span>
+                <span class="count-badge" id="count-aesthetic">0</span>
+            </button>
+            <button class="filter-btn" data-category="study" data-type="coffee" onclick="filterMarkers('study')">
+                <i class="fas fa-laptop icon-study"></i>
+                <span>讀書工作</span>
+                <span class="count-badge" id="count-study">0</span>
+            </button>
+            <button class="filter-btn" data-category="nerd" data-type="coffee" onclick="filterMarkers('nerd')">
+                <i class="fas fa-glasses icon-nerd"></i>
+                <span>咖啡行家</span>
+                <span class="count-badge" id="count-nerd">0</span>
+            </button>
+            <button class="filter-btn" data-category="community" data-type="coffee" onclick="filterMarkers('community')">
+                <i class="fas fa-users icon-community"></i>
+                <span>溫馨聚會</span>
+                <span class="count-badge" id="count-community">0</span>
+            </button>
+        </div>
+
+        <div id="restaurantSubcategories" style="display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+            <h3>餐廳類型</h3>
+            <button class="filter-btn" data-category="mexican" data-type="restaurant" onclick="filterMarkers('mexican')">
+                <i class="fas fa-pepper-hot" style="color: #dc2626;"></i>
+                <span>墨西哥</span>
+                <span class="count-badge" id="count-mexican">0</span>
+            </button>
+            <button class="filter-btn" data-category="chinese" data-type="restaurant" onclick="filterMarkers('chinese')">
+                <i class="fas fa-dragon" style="color: #dc2626;"></i>
+                <span>中式</span>
+                <span class="count-badge" id="count-chinese">0</span>
+            </button>
+            <button class="filter-btn" data-category="middle-eastern" data-type="restaurant" onclick="filterMarkers('middle-eastern')">
+                <i class="fas fa-mosque" style="color: #059669;"></i>
+                <span>中東</span>
+                <span class="count-badge" id="count-middle-eastern">0</span>
+            </button>
+            <button class="filter-btn" data-category="korean" data-type="restaurant" onclick="filterMarkers('korean')">
+                <i class="fas fa-fire" style="color: #dc2626;"></i>
+                <span>韓式</span>
+                <span class="count-badge" id="count-korean">0</span>
+            </button>
+            <button class="filter-btn" data-category="european" data-type="restaurant" onclick="filterMarkers('european')">
+                <i class="fas fa-wine-glass" style="color: #7c3aed;"></i>
+                <span>歐美</span>
+                <span class="count-badge" id="count-european">0</span>
+            </button>
+            <button class="filter-btn" data-category="pizza" data-type="restaurant" onclick="filterMarkers('pizza')">
+                <i class="fas fa-pizza-slice" style="color: #ea580c;"></i>
+                <span>披薩</span>
+                <span class="count-badge" id="count-pizza">0</span>
+            </button>
+            <button class="filter-btn" data-category="sandwich" data-type="restaurant" onclick="filterMarkers('sandwich')">
+                <i class="fas fa-hamburger" style="color: #c2410c;"></i>
+                <span>三明治/漢堡</span>
+                <span class="count-badge" id="count-sandwich">0</span>
+            </button>
+            <button class="filter-btn" data-category="bar" data-type="restaurant" onclick="filterMarkers('bar')">
+                <i class="fas fa-beer" style="color: #d97706;"></i>
+                <span>酒吧</span>
+                <span class="count-badge" id="count-bar">0</span>
+            </button>
+            <button class="filter-btn" data-category="indian" data-type="restaurant" onclick="filterMarkers('indian')">
+                <i class="fas fa-om" style="color: #ea580c;"></i>
+                <span>印度</span>
+                <span class="count-badge" id="count-indian">0</span>
+            </button>
+            <button class="filter-btn" data-category="thai" data-type="restaurant" onclick="filterMarkers('thai')">
+                <i class="fas fa-leaf" style="color: #16a34a;"></i>
+                <span>泰式</span>
+                <span class="count-badge" id="count-thai">0</span>
+            </button>
+        </div>
     </div>
 
     <div id="map"></div>
 
-    <!-- 新增咖啡店按鈕 -->
+    <!-- 新增咖啡店/餐廳按鈕 -->
     <button class="add-shop-btn" onclick="openModal()">
         <i class="fas fa-plus"></i>
     </button>
@@ -788,7 +861,7 @@
     <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-coffee"></i> 新增咖啡店</h2>
+                <h2><i class="fas fa-map-marker-alt"></i> 新增地點</h2>
                 <button class="modal-close" onclick="closeModal()">
                     <i class="fas fa-times"></i>
                 </button>
@@ -796,18 +869,23 @@
             <div class="modal-body">
                 <form id="coffeeShopForm" onsubmit="submitForm(event)">
                     <div class="form-group">
-                        <label for="shopName">咖啡店名稱 *</label>
+                        <label for="placeType">類型 *</label>
+                        <select id="placeType" name="placeType" required onchange="updateCategoryOptions()">
+                            <option value="">請選擇...</option>
+                            <option value="coffee">咖啡店</option>
+                            <option value="restaurant">餐廳</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shopName">名稱 *</label>
                         <input type="text" id="shopName" name="shopName" required placeholder="例如：Greenhouse Coffee + Plants">
                     </div>
 
                     <div class="form-group">
                         <label for="category">類別 *</label>
                         <select id="category" name="category" required onchange="updateIconByCategory()">
-                            <option value="">請選擇...</option>
-                            <option value="aesthetic">氣氛美感 - 適合拍照、環境優美</option>
-                            <option value="study">讀書工作 - 插座多、適合學習</option>
-                            <option value="nerd">咖啡行家 - 專注咖啡品質</option>
-                            <option value="community">溫馨聚會 - 社區友善、適合聚會</option>
+                            <option value="">請先選擇類型...</option>
                         </select>
                     </div>
 
@@ -872,82 +950,278 @@
     <script>
         // --- 1. 詳細店家資料庫 ---
         const defaultPlaces = [
+            // --- ☕ 咖啡店 (Coffee Shops) ---
             {
                 id: 1,
                 name: "Greenhouse Coffee + Plants",
+                type: "coffee",
                 category: "aesthetic",
-                lat: 44.5643, 
+                lat: 44.5643,
                 lng: -123.2614,
                 icon: "leaf",
-                desc: "被植物包圍的溫室咖啡廳,光線非常充足,心情會變很好。店內同時販售精選植栽,讓你可以把綠意帶回家。",
-                features: ["📸 適合拍照", "🌱 有賣植物", "☀️ 採光佳"],
+                desc: "被植物包圍的溫室咖啡廳，光線非常充足。店內同時販售精選植栽，氛圍清新自然，是放鬆心情的絕佳去處。",
+                features: ["📸 適合拍照", "🌱 有賣植物", "☀️ 採光佳", "🍃 植栽販售"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJi3lah6xBwFQRnmEChZrqk1g"
             },
             {
                 id: 2,
                 name: "Futura Coffee Roasters",
+                type: "coffee",
                 category: "aesthetic",
-                lat: 44.5629, 
+                lat: 44.5629,
                 lng: -123.2601,
                 icon: "seedling",
-                desc: "前身為 Tried & True。現代工業風設計,專注於永續農業與高品質手沖。每一杯咖啡都是藝術品。",
-                features: ["☕ 手沖咖啡", "🧱 工業風", "🌍 永續環保"],
+                desc: "前身為 Tried & True。現代工業風設計，專注於永續農業與高品質手沖。每一杯咖啡都是藝術品，注重產地與風味。",
+                features: ["☕ 手沖咖啡", "🧱 工業風", "🌍 永續環保", "🥯 輕食甜點"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJgwQZuutAwFQR_hYeRaEI8Tk"
             },
             {
                 id: 3,
                 name: "Interzone",
+                type: "coffee",
                 category: "study",
-                lat: 44.5677, 
+                lat: 44.5677,
                 lng: -123.2738,
                 icon: "guitar",
-                desc: "校區旁的龐克搖滾風格店。開得比較晚,適合需要特殊靈感的時候。有機燕麥粥和貝果也值得一試。",
-                features: ["🎸 搖滾Vibe", "🦉 開到較晚", "🥣 有機燕麥粥"],
+                desc: "校區旁的龐克搖滾風格店。營業時間較晚，適合需要特殊靈感或熬夜讀書的時候。有機燕麥粥和貝果是學生最愛。",
+                features: ["🎸 搖滾Vibe", "🦉 開到較晚", "🥣 有機燕麥粥", "🎓 近校園"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJZ0Gk571AwFQR3i_43l-BJkI"
             },
             {
                 id: 4,
                 name: "Coffee Culture (Kings)",
+                type: "coffee",
                 category: "study",
-                lat: 44.5778, 
+                lat: 44.5778,
                 lng: -123.2748,
                 icon: "book",
-                desc: "空間寬敞、插座多,是許多 OSU 學生趕論文的秘密基地。自家烘焙的點心也很受歡迎。",
-                features: ["💻 插座多", "📚 適合讀書", "🥯 自家烘焙點心"],
+                desc: "空間寬敞、座位多且插座充足，是許多 OSU 學生趕論文的秘密基地。自家烘焙的點心和三明治也很受歡迎。",
+                features: ["💻 插座多", "📚 適合讀書", "🥪 三明治", "🚗 停車方便"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJK8GsEZxAwFQRwjxaGThm9lU"
             },
             {
                 id: 5,
                 name: "Oregon Coffee & Tea",
+                type: "coffee",
                 category: "nerd",
-                lat: 44.5650, 
+                lat: 44.5650,
                 lng: -123.2595,
                 icon: "coffee",
-                desc: "數十年老店,專注於販售新鮮烘焙豆與茶葉,行家必去。一走進去就會被豆子的香氣包圍。",
-                features: ["🛍️ 買豆首選", "👃 香氣四溢", "🍵 茶葉選擇多"],
+                desc: "數十年老店，專注於販售新鮮烘焙豆與茶葉，行家必去。一走進去就會被濃郁的豆子香氣包圍。",
+                features: ["🛍️ 買豆首選", "👃 香氣四溢", "🍵 茶葉專賣", "📜 老字號"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJu3p_dutAwFQRnqeobhWXnuU"
             },
             {
                 id: 6,
                 name: "Imagine Coffee Co.",
+                type: "coffee",
                 category: "community",
-                lat: 44.5501, 
+                lat: 44.5501,
                 lng: -123.3130,
                 icon: "music",
-                desc: "像是社區客廳一樣溫暖,常有現場音樂演奏與藝術展覽。在這裡你會遇到很多有趣的本地人。",
-                features: ["🎨 藝術展覽", "🎵 現場音樂", "🛋️ 沙發區"],
+                desc: "像是社區客廳一樣溫暖，常有現場音樂演奏與藝術展覽。位於 Philomath 方向，是一個遠離塵囂的溫馨角落。",
+                features: ["🎨 藝術展覽", "🎵 現場音樂", "🛋️ 沙發區", "🏘️ 社區感"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJhffwvEBHwFQRLy-xUiAV0GY"
             },
             {
                 id: 7,
                 name: "Bodhi Cafe & Bakery",
+                type: "coffee",
                 category: "community",
-                lat: 44.5600, 
+                lat: 44.5600,
                 lng: -123.2622,
                 icon: "bread-slice",
-                desc: "麵包是本體!使用在地食材製作的早午餐非常受歡迎。豆蔻拿鐵搭配剛出爐的麵包是絕配。",
-                features: ["🥐 超強麵包", "🥪 早午餐", "🏘️ 戶外座位"],
+                desc: "麵包是本體！使用在地食材製作的早午餐非常受歡迎。豆蔻拿鐵搭配剛出爐的麵包是絕配。有戶外座位。",
+                features: ["🥐 超強麵包", "🥪 早午餐", "🌞 戶外座位", "🥬 在地食材"],
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJww_2m3VBwFQRfyir2HHDTsE"
+            },
+
+            // --- 🇲🇽 餐廳 - 墨西哥料理 (Mexican) ---
+            {
+                id: 101,
+                name: "Oscar's Tacos and Cantina",
+                type: "restaurant",
+                category: "mexican",
+                lat: 44.5922,
+                lng: -123.2523,
+                icon: "pepper-hot",
+                desc: "高品質、美味且份量充足的墨西哥料理。Gobernador 捲餅和 Carnitas 是必點。甜點法蘭 (Flan) 絕對不能錯過。",
+                features: ["⭐ 4.9 星", "🌮 必吃捲餅", "🍮 法蘭甜點", "🚗 停車方便"],
+                link: "https://maps.google.com/?q=Oscar's+Tacos+and+Cantina+Corvallis"
+            },
+            {
+                id: 102,
+                name: "El charro negro",
+                type: "restaurant",
+                category: "mexican",
+                lat: 44.5803,
+                lng: -123.2601,
+                icon: "pepper-hot",
+                desc: "正宗墨西哥風味，份量極大！招牌推薦 Quesabirria (沾肉湯吃) 和 Pollo Loco。大學生出示證件常有優惠。",
+                features: ["⭐ 4.7 星", "🥘 Quesabirria", "🍹 無酒精特調", "🎓 學生優惠"],
+                link: "https://maps.google.com/?q=El+Charro+Negro+Corvallis"
+            },
+
+            // --- 🇨🇳 餐廳 - 中式料理 (Chinese) ---
+            {
+                id: 103,
+                name: "Tian Fu Noodle (天府麵食)",
+                type: "restaurant",
+                category: "chinese",
+                lat: 44.5675,
+                lng: -123.2724,
+                icon: "fire",
+                desc: "位於校園旁的溫馨小店。主打手工麵食和創意「DIY 個人火鍋」，麻醬湯底非常濃郁。擔擔麵和水餃也是一絕。",
+                features: ["⭐ 4.8 星", "🍜 手工麵食", "🍲 個人火鍋", "🎓 近校園"],
+                link: "http://www.tianfudiyhotpot.com/"
+            },
+
+            // --- 🕌 餐廳 - 中東料理 (Middle Eastern) ---
+            {
+                id: 104,
+                name: "Khalo Naser Syrian Cuisine",
+                type: "restaurant",
+                category: "middle-eastern",
+                lat: 44.5651,
+                lng: -123.2586,
+                icon: "mosque",
+                desc: "家庭經營的敘利亞餐廳，氛圍優雅溫馨。必點：羊小腿、雞肉沙威瑪、以及口感滑順的鷹嘴豆泥。待客如親。",
+                features: ["⭐ 4.8 星", "🥙 沙威瑪", "🍖 燉羊肉", "🛋️ 氣氛極佳"],
+                link: "http://www.khalonaser.com/"
+            },
+
+            // --- 🇰🇷 餐廳 - 韓式料理 (Korean) ---
+            {
+                id: 105,
+                name: "K-BBQ EXPRESS",
+                type: "restaurant",
+                category: "korean",
+                lat: 44.5690,
+                lng: -123.2784,
+                icon: "fire",
+                desc: "校園附近的超人氣韓式快餐。烤肉拌飯 (Bibimbap) 和韓式飯捲 (Kimbap) 是趕課學生的最愛。老闆非常親切。",
+                features: ["⭐ 4.6 星", "🍱 烤肉拌飯", "🍙 飯捲", "⚡ 出餐快"],
+                link: "https://www.kbbqexpressor.com/"
+            },
+
+            // --- 🇪🇺 餐廳 - 歐美料理 (European/American) ---
+            {
+                id: 106,
+                name: "Caves Corvallis",
+                type: "restaurant",
+                category: "european",
+                lat: 44.5622,
+                lng: -123.2623,
+                icon: "wine-glass",
+                desc: "舒適的酒窖餐廳，提供結合歐美風味的時令菜單。早午餐非常受歡迎，擁有豐富的精釀啤酒單和戶外座位。",
+                features: ["⭐ 4.6 星", "🍷 精釀啤酒", "🍳 早午餐", "🌞 戶外座位"],
+                link: "http://cavescorvallis.com/"
+            },
+
+            // --- 🍕 餐廳 - 披薩 (Pizza) ---
+            {
+                id: 107,
+                name: "Cirello's Pizza",
+                type: "restaurant",
+                category: "pizza",
+                lat: 44.5892,
+                lng: -123.2564,
+                icon: "pizza-slice",
+                desc: "位於 Circle Blvd 的經典紐約式披薩。餅皮酥脆，推薦西西里披薩 (Sicilian)。裝潢復古，很有 80 年代風格。",
+                features: ["⭐ 4.4 星", "🍕 紐約披薩", "🧄 烤大蒜", "📺 復古風"],
+                link: "http://cirellospizza.com/"
+            },
+            {
+                id: 108,
+                name: "American Dream Pizza (Downtown)",
+                type: "restaurant",
+                category: "pizza",
+                lat: 44.5628,
+                lng: -123.2608,
+                icon: "pizza-slice",
+                desc: "Corvallis 的地標級披薩店。厚片披薩可單片購買，甚至有屋頂座位區！提供多種在地啤酒，氣氛超High。",
+                features: ["⭐ 4.3 星", "🍕 單片販售", "🏙️ 屋頂座位", "🍺 在地啤酒"],
+                link: "http://adpizza.com/"
+            },
+
+            // --- 🍔 餐廳 - 三明治/漢堡 (Sandwich/Burger) ---
+            {
+                id: 109,
+                name: "Swan Dive Sandwiches",
+                type: "restaurant",
+                category: "sandwich",
+                lat: 44.5635,
+                lng: -123.2634,
+                icon: "bread-slice",
+                desc: "在地評價極高的三明治店。自家烘焙的麵包是靈魂，搭配新鮮在地食材。被譽為 Corvallis 最好吃的三明治。",
+                features: ["⭐ 4.8 星", "🥖 自家麵包", "🥗 在地食材", "🍸 特色調酒"],
+                link: "https://swandivecorvallis.com/"
+            },
+            {
+                id: 110,
+                name: "Bo & Vine Burger",
+                type: "restaurant",
+                category: "sandwich",
+                lat: 44.5648,
+                lng: -123.2609,
+                icon: "hamburger",
+                desc: "創意手工漢堡店。推薦嘗試花生醬培根漢堡或櫻桃哈瓦那辣醬。擁有豐富的客製化醬料吧台 (Sauce Bar)。",
+                features: ["⭐ 4.4 星", "🍔 手工漢堡", "🍶 醬料吧", "🍟 堆疊薯條"],
+                link: "https://boandvine.com/"
+            },
+
+            // --- 🍺 餐廳 - 酒吧 (Bar) ---
+            {
+                id: 111,
+                name: "Beer:30",
+                type: "restaurant",
+                category: "bar",
+                lat: 44.5474,
+                lng: -123.2651,
+                icon: "beer",
+                desc: "位於南邊的精釀啤酒吧。擁有超過 30 種輪替生啤，價格親民。這裡氣氛悠閒，適合和朋友聊天看球賽。",
+                features: ["⭐ 4.8 星", "🍺 30+ 生啤", "📺 運動轉播", "💰 價格親民"],
+                link: "https://maps.google.com/?q=Beer:30+Corvallis"
+            },
+            {
+                id: 112,
+                name: "Squirrels Tavern",
+                type: "restaurant",
+                category: "bar",
+                lat: 44.5640,
+                lng: -123.2602,
+                icon: "beer",
+                desc: "Corvallis 最具代表性的歷史老酒館。有撞球桌、閣樓座位和美味的炸薯條。是體驗當地文化的最佳地點。",
+                features: ["⭐ 4.6 星", "🎱 撞球桌", "🍟 必點薯條", "🏛️ 歷史老店"],
+                link: "http://www.squirrelstavern.com/"
+            },
+
+            // --- 🍛 餐廳 - 印度料理 (Indian) ---
+            {
+                id: 113,
+                name: "Royal India Cuisine",
+                type: "restaurant",
+                category: "indian",
+                lat: 44.5860,
+                lng: -123.2553,
+                icon: "om",
+                desc: "位於北邊的道地印度料理，下午有提供自助餐。羊肉咖哩和蔬菜庫爾瑪非常受歡迎。烤餅 (Naan) 都是現烤的。",
+                features: ["⭐ 4.6 星", "🍛 咖哩", "🍽️ 午間自助餐", "🌱 素食友善"],
+                link: "https://www.royalindiacorvallis.com/"
+            },
+
+            // --- 🇹🇭 餐廳 - 泰式料理 (Thai) ---
+            {
+                id: 114,
+                name: "Tarn Tip Thai Cuisine",
+                type: "restaurant",
+                category: "thai",
+                lat: 44.5690,
+                lng: -123.2798,
+                icon: "leaf",
+                desc: "Monroe 街上的溫馨泰式小館。香脆羅勒鴨和酪梨咖哩是必點招牌。服務親切快速，價格也很實惠。",
+                features: ["⭐ 4.6 星", "🦆 羅勒鴨", "🥑 酪梨咖哩", "⚡ 服務快速"],
+                link: "http://corvallismenus.com/tarntip_thai_menu.pdf"
             }
         ];
 
@@ -1025,10 +1299,22 @@
 
         // Icon 對應表
         const categoryIcons = {
+            // 咖啡店
             'aesthetic': 'leaf',
             'study': 'laptop',
             'nerd': 'glasses',
-            'community': 'users'
+            'community': 'users',
+            // 餐廳
+            'mexican': 'pepper-hot',
+            'chinese': 'dragon',
+            'middle-eastern': 'mosque',
+            'korean': 'fire',
+            'european': 'wine-glass',
+            'pizza': 'pizza-slice',
+            'sandwich': 'hamburger',
+            'bar': 'beer',
+            'indian': 'om',
+            'thai': 'leaf'
         };
 
         function createPopupContent(place) {
@@ -1051,15 +1337,30 @@
         }
 
         function filterMarkers(category) {
-            // 1. 更新按鈕狀態
+            // 1. 更新按鈕狀態和子類別顯示
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            
+
             // 找到對應按鈕並添加 active class
             const activeBtn = document.querySelector(`.filter-btn[data-category="${category}"]`);
             if (activeBtn) {
                 activeBtn.classList.add('active');
+            }
+
+            // 控制子類別顯示/隱藏
+            const coffeeSubcategories = document.getElementById('coffeeSubcategories');
+            const restaurantSubcategories = document.getElementById('restaurantSubcategories');
+
+            if (category === 'coffee') {
+                coffeeSubcategories.style.display = 'block';
+                restaurantSubcategories.style.display = 'none';
+            } else if (category === 'restaurant') {
+                coffeeSubcategories.style.display = 'none';
+                restaurantSubcategories.style.display = 'block';
+            } else if (category === 'all') {
+                coffeeSubcategories.style.display = 'none';
+                restaurantSubcategories.style.display = 'none';
             }
 
             // 2. 清除地圖上的標記
@@ -1067,21 +1368,30 @@
             currentMarkers = [];
 
             // 3. 篩選資料
-            const filteredPlaces = category === 'all' 
-                ? places 
-                : places.filter(p => p.category === category);
+            let filteredPlaces;
+            if (category === 'all') {
+                filteredPlaces = places;
+            } else if (category === 'coffee') {
+                filteredPlaces = places.filter(p => p.type === 'coffee');
+            } else if (category === 'restaurant') {
+                filteredPlaces = places.filter(p => p.type === 'restaurant');
+            } else {
+                // 子類別篩選
+                filteredPlaces = places.filter(p => p.category === category);
+            }
 
             // 4. 重新加上標記 (帶有落下動畫效果)
             filteredPlaces.forEach((place, index) => {
                 setTimeout(() => {
-                    const icon = createCustomIcon(place.category, place.icon);
+                    const markerCategory = place.type === 'restaurant' ? 'restaurant' : place.category;
+                    const icon = createCustomIcon(markerCategory, place.icon);
                     const marker = L.marker([place.lat, place.lng], { icon: icon });
-                    
+
                     marker.bindPopup(createPopupContent(place), {
                         maxWidth: 300,
                         className: 'custom-popup'
                     });
-                    
+
                     // 添加點擊事件
                     marker.on('click', function() {
                         map.setView([place.lat, place.lng], 15, {
@@ -1089,11 +1399,11 @@
                             duration: 0.5
                         });
                     });
-                    
+
                     // 加入圖層
                     marker.addTo(markersLayer);
                     currentMarkers.push(marker);
-                    
+
                     // 如果只有一個結果,自動聚焦
                     if (filteredPlaces.length === 1) {
                         map.setView([place.lat, place.lng], 16, {
@@ -1109,7 +1419,7 @@
             if (filteredPlaces.length > 1) {
                 setTimeout(() => {
                     const bounds = L.latLngBounds(filteredPlaces.map(p => [p.lat, p.lng]));
-                    map.fitBounds(bounds, { 
+                    map.fitBounds(bounds, {
                         padding: [60, 60],
                         maxZoom: 14,
                         animate: true,
@@ -1127,11 +1437,28 @@
         // --- 5. 更新計數器 ---
         function updateCounts() {
             const counts = {
+                // 主類別
                 all: places.length,
+                coffee: places.filter(p => p.type === 'coffee').length,
+                restaurant: places.filter(p => p.type === 'restaurant').length,
+
+                // 咖啡店子類別
                 aesthetic: places.filter(p => p.category === 'aesthetic').length,
                 study: places.filter(p => p.category === 'study').length,
                 nerd: places.filter(p => p.category === 'nerd').length,
-                community: places.filter(p => p.category === 'community').length
+                community: places.filter(p => p.category === 'community').length,
+
+                // 餐廳子類別
+                mexican: places.filter(p => p.category === 'mexican').length,
+                chinese: places.filter(p => p.category === 'chinese').length,
+                'middle-eastern': places.filter(p => p.category === 'middle-eastern').length,
+                korean: places.filter(p => p.category === 'korean').length,
+                european: places.filter(p => p.category === 'european').length,
+                pizza: places.filter(p => p.category === 'pizza').length,
+                sandwich: places.filter(p => p.category === 'sandwich').length,
+                bar: places.filter(p => p.category === 'bar').length,
+                indian: places.filter(p => p.category === 'indian').length,
+                thai: places.filter(p => p.category === 'thai').length
             };
 
             Object.keys(counts).forEach(category => {
@@ -1149,6 +1476,37 @@
         function openModal() {
             document.getElementById('modalOverlay').classList.add('active');
             document.body.style.overflow = 'hidden'; // 防止背景滾動
+        }
+
+        function updateCategoryOptions() {
+            const placeTypeSelect = document.getElementById('placeType');
+            const categorySelect = document.getElementById('category');
+            const placeType = placeTypeSelect.value;
+
+            // 清空現有選項
+            categorySelect.innerHTML = '<option value="">請選擇...</option>';
+
+            if (placeType === 'coffee') {
+                categorySelect.innerHTML += `
+                    <option value="aesthetic">氣氛美感 - 適合拍照、環境優美</option>
+                    <option value="study">讀書工作 - 插座多、適合學習</option>
+                    <option value="nerd">咖啡行家 - 專注咖啡品質</option>
+                    <option value="community">溫馨聚會 - 社區友善、適合聚會</option>
+                `;
+            } else if (placeType === 'restaurant') {
+                categorySelect.innerHTML += `
+                    <option value="mexican">墨西哥料理</option>
+                    <option value="chinese">中式料理</option>
+                    <option value="middle-eastern">中東料理</option>
+                    <option value="korean">韓式料理</option>
+                    <option value="european">歐美料理</option>
+                    <option value="pizza">披薩</option>
+                    <option value="sandwich">三明治/漢堡</option>
+                    <option value="bar">酒吧</option>
+                    <option value="indian">印度料理</option>
+                    <option value="thai">泰式料理</option>
+                `;
+            }
         }
 
         function updateIconByCategory() {
@@ -1228,10 +1586,11 @@
             // 生成新的 ID（使用時間戳來確保唯一性）
             const newId = Date.now();
 
-            // 建立新的咖啡店物件
+            // 建立新的地點物件
             const newPlace = {
                 id: newId,
                 name: formData.get('shopName'),
+                type: formData.get('placeType'),
                 category: formData.get('category'),
                 lat: parseFloat(formData.get('latitude')),
                 lng: parseFloat(formData.get('longitude')),
@@ -1242,7 +1601,7 @@
             };
 
             // 驗證必填欄位
-            if (!newPlace.name || !newPlace.category || !newPlace.lat || !newPlace.lng || !newPlace.icon || !newPlace.desc) {
+            if (!newPlace.name || !newPlace.type || !newPlace.category || !newPlace.lat || !newPlace.lng || !newPlace.icon || !newPlace.desc) {
                 alert('請填寫所有必填欄位！');
                 return;
             }
@@ -1268,7 +1627,8 @@
 
             // 關閉表單並顯示成功訊息
             closeModal();
-            alert('✅ 咖啡店已成功新增！\n\n' + newPlace.name + ' 已經加入地圖了。');
+            const placeTypeName = newPlace.type === 'coffee' ? '咖啡店' : '餐廳';
+            alert('✅ ' + placeTypeName + '已成功新增！\n\n' + newPlace.name + ' 已經加入地圖了。');
 
             // 自動聚焦到新增的地點
             setTimeout(() => {
