@@ -466,6 +466,272 @@
                 background: #3a3a3a;
             }
         }
+
+        /* --- 新增咖啡店按鈕 --- */
+        .add-shop-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #6f4e37 0%, #5a3d2d 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(111, 78, 55, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-shop-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 8px 24px rgba(111, 78, 55, 0.6);
+        }
+
+        /* --- 表單模態視窗 --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #6f4e37 0%, #5a3d2d 100%);
+            color: white;
+            padding: 24px 28px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6f4e37;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-help {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        .features-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .feature-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .feature-input-row input {
+            flex: 1;
+        }
+
+        .feature-input-row button {
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .feature-input-row button:hover {
+            background: #e0e0e0;
+        }
+
+        .add-feature-btn {
+            padding: 10px 16px;
+            background: #6f4e37;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s ease;
+        }
+
+        .add-feature-btn:hover {
+            background: #5a3d2d;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2c8e3c 0%, #27753a 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #27753a 0%, #1e5a2d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(44, 142, 60, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* 手機版表單優化 */
+        @media (max-width: 768px) {
+            .add-shop-btn {
+                bottom: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .add-shop-btn:hover {
+                transform: translateX(-50%) scale(1.1) rotate(90deg);
+            }
+
+            .modal-content {
+                width: 95%;
+                max-height: 85vh;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -513,11 +779,99 @@
 
     <div id="map"></div>
 
+    <!-- 新增咖啡店按鈕 -->
+    <button class="add-shop-btn" onclick="openModal()">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- 表單模態視窗 -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-coffee"></i> 新增咖啡店</h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="coffeeShopForm" onsubmit="submitForm(event)">
+                    <div class="form-group">
+                        <label for="shopName">咖啡店名稱 *</label>
+                        <input type="text" id="shopName" name="shopName" required placeholder="例如：Greenhouse Coffee + Plants">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">類別 *</label>
+                        <select id="category" name="category" required>
+                            <option value="">請選擇...</option>
+                            <option value="aesthetic">氣氛美感 - 適合拍照、環境優美</option>
+                            <option value="study">讀書工作 - 插座多、適合學習</option>
+                            <option value="nerd">咖啡行家 - 專注咖啡品質</option>
+                            <option value="community">溫馨聚會 - 社區友善、適合聚會</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="latitude">緯度 (Latitude) *</label>
+                            <input type="number" id="latitude" name="latitude" step="0.0001" required placeholder="44.5643">
+                            <div class="form-help">可從 Google Maps 取得</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="longitude">經度 (Longitude) *</label>
+                            <input type="number" id="longitude" name="longitude" step="0.0001" required placeholder="-123.2614">
+                            <div class="form-help">可從 Google Maps 取得</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="icon">圖示名稱 *</label>
+                        <input type="text" id="icon" name="icon" required placeholder="例如：leaf, coffee, book">
+                        <div class="form-help">使用 Font Awesome 圖示名稱（不含 fa-）</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">詳細描述 *</label>
+                        <textarea id="description" name="description" required placeholder="描述咖啡店的特色、氛圍、推薦飲品等..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>特色標籤</label>
+                        <div class="features-input-container" id="featuresContainer">
+                            <div class="feature-input-row">
+                                <input type="text" placeholder="例如：📸 適合拍照" class="feature-input">
+                                <button type="button" onclick="removeFeature(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" class="add-feature-btn" onclick="addFeatureInput()">
+                            <i class="fas fa-plus"></i> 新增標籤
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="googleMapsLink">Google Maps 連結</label>
+                        <input type="url" id="googleMapsLink" name="googleMapsLink" placeholder="https://www.google.com/maps/place/...">
+                        <div class="form-help">選填：從 Google Maps 複製分享連結</div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal()">取消</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-check"></i> 提交
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <script>
         // --- 1. 詳細店家資料庫 ---
-        const places = [
+        const defaultPlaces = [
             {
                 id: 1,
                 name: "Greenhouse Coffee + Plants",
@@ -596,6 +950,39 @@
                 link: "https://www.google.com/maps/place/?q=place_id:ChIJww_2m3VBwFQRfyir2HHDTsE"
             }
         ];
+
+        // --- 1.5. localStorage 整合：合併預設資料和使用者資料 ---
+        function loadPlacesFromStorage() {
+            const userPlaces = localStorage.getItem('userCoffeeShops');
+            if (userPlaces) {
+                try {
+                    return [...defaultPlaces, ...JSON.parse(userPlaces)];
+                } catch (e) {
+                    console.error('Error loading user data:', e);
+                    return defaultPlaces;
+                }
+            }
+            return defaultPlaces;
+        }
+
+        function savePlaceToStorage(newPlace) {
+            const userPlaces = localStorage.getItem('userCoffeeShops');
+            let placesArray = [];
+
+            if (userPlaces) {
+                try {
+                    placesArray = JSON.parse(userPlaces);
+                } catch (e) {
+                    placesArray = [];
+                }
+            }
+
+            placesArray.push(newPlace);
+            localStorage.setItem('userCoffeeShops', JSON.stringify(placesArray));
+        }
+
+        // 初始化 places 陣列（合併預設資料和使用者資料）
+        let places = loadPlacesFromStorage();
 
         // --- 2. 初始化地圖 ---
         const map = L.map('map', { 
@@ -757,6 +1144,149 @@
 
         // 初始化計數器
         updateCounts();
+
+        // --- 6. 表單管理函數 ---
+        function openModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden'; // 防止背景滾動
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = ''; // 恢復滾動
+            document.getElementById('coffeeShopForm').reset();
+
+            // 重置特色標籤為一個輸入框
+            const container = document.getElementById('featuresContainer');
+            container.innerHTML = `
+                <div class="feature-input-row">
+                    <input type="text" placeholder="例如：📸 適合拍照" class="feature-input">
+                    <button type="button" onclick="removeFeature(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        function closeModalOnOverlay(event) {
+            if (event.target === event.currentTarget) {
+                closeModal();
+            }
+        }
+
+        function addFeatureInput() {
+            const container = document.getElementById('featuresContainer');
+            const newRow = document.createElement('div');
+            newRow.className = 'feature-input-row';
+            newRow.innerHTML = `
+                <input type="text" placeholder="例如：📸 適合拍照" class="feature-input">
+                <button type="button" onclick="removeFeature(this)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function removeFeature(button) {
+            const container = document.getElementById('featuresContainer');
+            const row = button.parentElement;
+
+            // 至少保留一個輸入框
+            if (container.children.length > 1) {
+                row.remove();
+            } else {
+                // 如果只剩一個，清空它
+                const input = row.querySelector('input');
+                input.value = '';
+            }
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+
+            // 收集表單資料
+            const form = event.target;
+            const formData = new FormData(form);
+
+            // 收集所有特色標籤
+            const featureInputs = document.querySelectorAll('.feature-input');
+            const features = Array.from(featureInputs)
+                .map(input => input.value.trim())
+                .filter(value => value !== '');
+
+            // 生成新的 ID（使用時間戳來確保唯一性）
+            const newId = Date.now();
+
+            // 建立新的咖啡店物件
+            const newPlace = {
+                id: newId,
+                name: formData.get('shopName'),
+                category: formData.get('category'),
+                lat: parseFloat(formData.get('latitude')),
+                lng: parseFloat(formData.get('longitude')),
+                icon: formData.get('icon'),
+                desc: formData.get('description'),
+                features: features,
+                link: formData.get('googleMapsLink') || '#'
+            };
+
+            // 驗證必填欄位
+            if (!newPlace.name || !newPlace.category || !newPlace.lat || !newPlace.lng || !newPlace.icon || !newPlace.desc) {
+                alert('請填寫所有必填欄位！');
+                return;
+            }
+
+            // 驗證座標範圍（Corvallis 區域）
+            if (newPlace.lat < 44.0 || newPlace.lat > 45.0 || newPlace.lng > -122.0 || newPlace.lng < -124.0) {
+                if (!confirm('您輸入的座標似乎不在 Corvallis 區域，確定要繼續嗎？')) {
+                    return;
+                }
+            }
+
+            // 保存到 localStorage
+            savePlaceToStorage(newPlace);
+
+            // 添加到 places 陣列
+            places.push(newPlace);
+
+            // 更新計數器
+            updateCounts();
+
+            // 重新載入地圖標記
+            filterMarkers('all');
+
+            // 關閉表單並顯示成功訊息
+            closeModal();
+            alert('✅ 咖啡店已成功新增！\n\n' + newPlace.name + ' 已經加入地圖了。');
+
+            // 自動聚焦到新增的地點
+            setTimeout(() => {
+                map.setView([newPlace.lat, newPlace.lng], 16, {
+                    animate: true,
+                    duration: 1
+                });
+
+                // 找到並開啟新標記的 popup
+                setTimeout(() => {
+                    currentMarkers.forEach(marker => {
+                        const markerLatLng = marker.getLatLng();
+                        if (markerLatLng.lat === newPlace.lat && markerLatLng.lng === newPlace.lng) {
+                            marker.openPopup();
+                        }
+                    });
+                }, 500);
+            }, 300);
+        }
+
+        // 鍵盤快捷鍵：按 Esc 關閉模態視窗
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('modalOverlay');
+                if (modal.classList.contains('active')) {
+                    closeModal();
+                }
+            }
+        });
 
     </script>
 </body>
