@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corvallis Coffee Map Ultimate ☕</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        * { box-sizing: border-box; }
+        
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; 
+            overflow: hidden; 
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        }
+        
+        #map { height: 100vh; width: 100%; z-index: 1; }
+
+        /* --- 左上角標題面板優化 --- */
+        .title-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+            padding: 20px 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.05);
+            z-index: 1000;
+            border-left: 5px solid #6f4e37;
+            max-width: 300px;
+            animation: slideInLeft 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
+        }
+
+        .title-panel h1 { 
+            margin: 0; 
+            color: #6f4e37; 
+            font-size: 1.5rem; 
+            font-weight: 700;
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }
+        
+        .title-panel p { 
+            margin: 10px 0 0; 
+            color: #666; 
+            font-size: 0.9rem; 
+            line-height: 1.5;
+        }
+
+        .subtitle {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* --- 右上角篩選控制器優化 --- */
+        .filter-control {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.97);
+            padding: 12px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.05);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            animation: slideInRight 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
+            min-width: 200px;
+        }
+
+        .filter-control h3 {
+            margin: 0 0 8px 0;
+            padding: 0 8px;
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .filter-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 16px;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: #555;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: currentColor;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .filter-btn:hover { 
+            background: #f5f5f5; 
+            transform: translateX(3px);
+        }
+        
+        /* 激活狀態優化 */
+        .filter-btn.active { 
+            background: linear-gradient(135deg, #6f4e37 0%, #5a3d2d 100%);
+            color: white; 
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(111, 78, 55, 0.3);
+        }
+        
+        .filter-btn.active::before {
+            transform: scaleY(1);
+        }
+        
+        .filter-btn.active i { color: #fff; }
+
+        .filter-btn i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .filter-btn:hover i {
+            transform: scale(1.2);
+        }
+
+        /* 不同分類的 icon 顏色 */
+        .icon-aesthetic { color: #2c8e3c; }
+        .icon-study { color: #e67e22; }
+        .icon-nerd { color: #9b59b6; }
+        .icon-community { color: #e74c3c; }
+
+        /* 計數器徽章 */
+        .count-badge {
+            margin-left: auto;
+            background: rgba(111, 78, 55, 0.1);
+            color: #6f4e37;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .filter-btn.active .count-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        /* --- Popup 樣式大幅優化 --- */
+        .leaflet-popup-content-wrapper {
+            border-radius: 16px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        }
+        
+        .leaflet-popup-content {
+            margin: 0;
+            width: 300px !important;
+        }
+
+        .popup-header {
+            background: linear-gradient(135deg, #6f4e37 0%, #5a3d2d 100%);
+            color: white;
+            padding: 16px 18px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.3px;
+        }
+
+        .popup-header i {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        .popup-body { 
+            padding: 18px; 
+            background: white;
+        }
+        
+        .popup-tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+        
+        .feature-tag {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+            color: #4a5568;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 16px;
+            border: 1px solid #dae4f7;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: transform 0.2s ease;
+        }
+
+        .feature-tag:hover {
+            transform: translateY(-2px);
+        }
+
+        .popup-desc { 
+            font-size: 0.95rem; 
+            color: #555; 
+            line-height: 1.6; 
+            margin-bottom: 16px;
+        }
+        
+        .popup-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #2c8e3c 0%, #27753a 100%);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(44, 142, 60, 0.2);
+        }
+        
+        .popup-btn:hover { 
+            background: linear-gradient(135deg, #27753a 0%, #1e5a2d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(44, 142, 60, 0.3);
+        }
+
+        .popup-btn i {
+            font-size: 1rem;
+        }
+
+        /* Leaflet popup 樣式調整 */
+        .leaflet-popup-tip {
+            background: white;
+        }
+
+        /* --- 自訂 Marker 圖標 --- */
+        .custom-marker {
+            background: white;
+            border: 3px solid #6f4e37;
+            border-radius: 50% 50% 50% 0;
+            width: 40px;
+            height: 40px;
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .custom-marker i {
+            transform: rotate(45deg);
+            color: #6f4e37;
+            font-size: 1.2rem;
+        }
+
+        .custom-marker:hover {
+            transform: rotate(-45deg) scale(1.15);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+
+        /* 不同類別的 marker 顏色 */
+        .marker-aesthetic { border-color: #2c8e3c; }
+        .marker-aesthetic i { color: #2c8e3c; }
+        
+        .marker-study { border-color: #e67e22; }
+        .marker-study i { color: #e67e22; }
+        
+        .marker-nerd { border-color: #9b59b6; }
+        .marker-nerd i { color: #9b59b6; }
+        
+        .marker-community { border-color: #e74c3c; }
+        .marker-community i { color: #e74c3c; }
+
+        /* 動畫優化 */
+        @keyframes slideInLeft { 
+            from { transform: translateX(-100px); opacity: 0; } 
+            to { transform: translateX(0); opacity: 1; } 
+        }
+        
+        @keyframes slideInRight { 
+            from { transform: translateX(100px); opacity: 0; } 
+            to { transform: translateX(0); opacity: 1; } 
+        }
+
+        @keyframes markerDrop {
+            0% { transform: translateY(-200px) scale(0.5); opacity: 0; }
+            60% { transform: translateY(10px) scale(1.1); opacity: 1; }
+            80% { transform: translateY(-5px) scale(0.95); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        .marker-animate {
+            animation: markerDrop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        /* Loading 動畫 */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            animation: fadeOut 0.5s ease 2s forwards;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #6f4e37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; pointer-events: none; }
+        }
+
+        .loading-text {
+            color: #6f4e37;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* RWD 手機版優化 */
+        @media (max-width: 768px) {
+            .title-panel { 
+                top: 10px; 
+                left: 10px; 
+                right: 10px; 
+                max-width: none; 
+                padding: 16px;
+            }
+            
+            .title-panel h1 {
+                font-size: 1.3rem;
+            }
+
+            .subtitle {
+                display: none;
+            }
+            
+            .filter-control { 
+                top: auto; 
+                bottom: 15px; 
+                right: 10px; 
+                left: 10px; 
+                flex-direction: row; 
+                overflow-x: auto; 
+                padding: 10px;
+                gap: 8px;
+                scrollbar-width: none;
+            }
+
+            .filter-control::-webkit-scrollbar {
+                display: none;
+            }
+
+            .filter-control h3 {
+                display: none;
+            }
+            
+            .filter-btn { 
+                flex: 0 0 auto; 
+                padding: 8px 14px; 
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+            
+            .filter-btn.active { 
+                transform: translateY(-3px);
+            }
+
+            .count-badge {
+                font-size: 0.7rem;
+                padding: 2px 6px;
+            }
+
+            .leaflet-popup-content {
+                width: 260px !important;
+            }
+        }
+
+        /* 暗色模式支援 (可選) */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            }
+
+            .title-panel {
+                background: linear-gradient(135deg, #2c2c2c 0%, #252525 100%);
+                color: #e0e0e0;
+            }
+
+            .title-panel h1 {
+                color: #d4a574;
+            }
+
+            .title-panel p {
+                color: #b0b0b0;
+            }
+
+            .filter-control {
+                background: rgba(44, 44, 44, 0.97);
+            }
+
+            .filter-btn {
+                color: #e0e0e0;
+            }
+
+            .filter-btn:hover {
+                background: #3a3a3a;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading 動畫 -->
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">☕ 正在準備咖啡地圖...</div>
+    </div>
+
+    <div class="title-panel">
+        <h1><i class="fas fa-mug-hot"></i> Corvallis Coffee Map</h1>
+        <p>探索 Corvallis 最棒的咖啡店！選擇右側選單篩選你的咖啡心情。</p>
+        <div class="subtitle">🎯 點擊地圖標記查看詳細資訊</div>
+    </div>
+
+    <div class="filter-control">
+        <h3>篩選類別</h3>
+        <button class="filter-btn active" data-category="all" onclick="filterMarkers('all')">
+            <i class="fas fa-layer-group"></i>
+            <span>全部顯示</span>
+            <span class="count-badge" id="count-all">7</span>
+        </button>
+        <button class="filter-btn" data-category="aesthetic" onclick="filterMarkers('aesthetic')">
+            <i class="fas fa-leaf icon-aesthetic"></i>
+            <span>氣氛美感</span>
+            <span class="count-badge" id="count-aesthetic">2</span>
+        </button>
+        <button class="filter-btn" data-category="study" onclick="filterMarkers('study')">
+            <i class="fas fa-laptop icon-study"></i>
+            <span>讀書工作</span>
+            <span class="count-badge" id="count-study">2</span>
+        </button>
+        <button class="filter-btn" data-category="nerd" onclick="filterMarkers('nerd')">
+            <i class="fas fa-glasses icon-nerd"></i>
+            <span>咖啡行家</span>
+            <span class="count-badge" id="count-nerd">1</span>
+        </button>
+        <button class="filter-btn" data-category="community" onclick="filterMarkers('community')">
+            <i class="fas fa-users icon-community"></i>
+            <span>溫馨聚會</span>
+            <span class="count-badge" id="count-community">2</span>
+        </button>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+        // --- 1. 詳細店家資料庫 ---
+        const places = [
+            {
+                id: 1,
+                name: "Greenhouse Coffee + Plants",
+                category: "aesthetic",
+                lat: 44.5643, 
+                lng: -123.2614,
+                icon: "leaf",
+                desc: "被植物包圍的溫室咖啡廳,光線非常充足,心情會變很好。店內同時販售精選植栽,讓你可以把綠意帶回家。",
+                features: ["📸 適合拍照", "🌱 有賣植物", "☀️ 採光佳"],
+                link: "https://www.google.com/maps/place/?q=place_id:ChIJi3lah6xBwFQRnmEChZrqk1g"
+            },
+            {
+                id: 2,
+                name: "Futura Coffee Roasters",
+                category: "aesthetic",
+                lat: 44.5629, 
+                lng: -123.2601,
+                icon: "seedling",
+                desc: "前身為 Tried & True。現代工業風設計,專注於永續農業與高品質手沖。每一杯咖啡都是藝術品。",
+                features: ["☕ 手沖咖啡", "🧱 工業風", "🌍 永續環保"],
+                link: "https://www.google.com/maps/place/?q=place_id:ChIJgwQZuutAwFQR_hYeRaEI8Tk"
+            },
+            {
+                id: 3,
+                name: "Interzone",
+                category: "study",
+                lat: 44.5677, 
+                lng: -123.2738,
+                icon: "guitar",
+                desc: "校區旁的龐克搖滾風格店。開得比較晚,適合需要特殊靈感的時候。有機燕麥粥和貝果也值得一試。",
+                features: ["🎸 搖滾Vibe", "🦉 開到較晚", "🥣 有機燕麥粥"],
+                link: "https://www.google.com/maps/place/?q=place_id:ChIJZ0Gk571AwFQR3i_43l-BJkI"
+            },
+            {
+                id: 4,
+                name: "Coffee Culture (Kings)",
+                category: "study",
+                lat: 44.5778, 
+                lng: -123.2748,
+                icon: "book",
+                desc: "空間寬敞、插座多,是許多 OSU 學生趕論文的秘密基地。自家烘焙的點心也很受歡迎。",
+                features: ["💻 插座多", "📚 適合讀書", "🥯 自家烘焙點心"],
+                link: "https://www.google.com/maps/place/?q=place_id:ChIJK8GsEZxAwFQRwjxaGThm9lU"
+            },
+            {
+                id: 5,
+                name: "Oregon Coffee & Tea",
+                category: "nerd",
+                lat: 44.5650, 
+                lng: -123.2595,
+                icon: "coffee",
+                desc: "數十年老店,專注於販售新鮮烘焙豆與茶葉,行家必去。一走進去就會被豆子的香氣包圍。",
+                features: ["🛍️ 買豆首選", "👃 香氣四溢", "🍵 茶葉選擇多"],
+                link: "https://www.google.com/maps/place/?q=place_id:ChIJu3p_dutAwFQRnqeobhWXnuU"
+            },
+            {
+                id: 6,
+                name: "Imagine Coffee Co.",
+                category: "community",
+                lat: 44.5501, 
+                lng: -123.3130,
+                icon: "music",
+                desc: "像是社區客廳一樣溫暖,常有現場音樂演奏與藝術展覽。在這裡你會遇到很多有趣的本地人。",
+                features: ["🎨 藝術展覽", "🎵 現場音樂", "🛋️ 沙發區"],
+                link: "https://www.google.com/maps/place/?q=place_id:ChIJhffwvEBHwFQRLy-xUiAV0GY"
+            },
+            {
+                id: 7,
+                name: "Bodhi Cafe & Bakery",
+                category: "community",
+                lat: 44.5600, 
+                lng: -123.2622,
+                icon: "bread-slice",
+                desc: "麵包是本體!使用在地食材製作的早午餐非常受歡迎。豆蔻拿鐵搭配剛出爐的麵包是絕配。",
+                features: ["🥐 超強麵包", "🥪 早午餐", "🏘️ 戶外座位"],
+                link: "https://www.google.com/maps/place/?q=place_id:ChIJww_2m3VBwFQRfyir2HHDTsE"
+            }
+        ];
+
+        // --- 2. 初始化地圖 ---
+        const map = L.map('map', { 
+            zoomControl: false,
+            minZoom: 11,
+            maxZoom: 18
+        }).setView([44.6000, -123.2600], 12);
+        
+        // 加入縮放控制器到右下角
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // 使用更美觀的地圖瓦片
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            maxZoom: 20
+        }).addTo(map);
+
+        // 飛入動畫
+        setTimeout(() => {
+            map.flyTo([44.5646, -123.2620], 14, { 
+                duration: 2,
+                easeLinearity: 0.5
+            });
+        }, 500);
+
+        // --- 3. 自訂 Marker Icon ---
+        function createCustomIcon(category, iconName) {
+            return L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div class="custom-marker marker-${category} marker-animate"><i class="fas fa-${iconName}"></i></div>`,
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
+            });
+        }
+
+        // --- 4. 標記管理邏輯 ---
+        let markersLayer = L.layerGroup().addTo(map);
+        let currentMarkers = [];
+
+        // Icon 對應表
+        const categoryIcons = {
+            'aesthetic': 'leaf',
+            'study': 'laptop',
+            'nerd': 'glasses',
+            'community': 'users'
+        };
+
+        function createPopupContent(place) {
+            const tagsHtml = place.features.map(f => `<span class="feature-tag">${f}</span>`).join('');
+            
+            return `
+                <div class="popup-header">
+                    <i class="fas fa-${place.icon}"></i>
+                    <span>${place.name}</span>
+                </div>
+                <div class="popup-body">
+                    <div class="popup-tag-container">${tagsHtml}</div>
+                    <div class="popup-desc">${place.desc}</div>
+                    <a href="${place.link}" target="_blank" class="popup-btn">
+                        <i class="fas fa-location-arrow"></i>
+                        <span>在 Google Maps 中開啟</span>
+                    </a>
+                </div>
+            `;
+        }
+
+        function filterMarkers(category) {
+            // 1. 更新按鈕狀態
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 找到對應按鈕並添加 active class
+            const activeBtn = document.querySelector(`.filter-btn[data-category="${category}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+
+            // 2. 清除地圖上的標記
+            markersLayer.clearLayers();
+            currentMarkers = [];
+
+            // 3. 篩選資料
+            const filteredPlaces = category === 'all' 
+                ? places 
+                : places.filter(p => p.category === category);
+
+            // 4. 重新加上標記 (帶有落下動畫效果)
+            filteredPlaces.forEach((place, index) => {
+                setTimeout(() => {
+                    const icon = createCustomIcon(place.category, place.icon);
+                    const marker = L.marker([place.lat, place.lng], { icon: icon });
+                    
+                    marker.bindPopup(createPopupContent(place), {
+                        maxWidth: 300,
+                        className: 'custom-popup'
+                    });
+                    
+                    // 添加點擊事件
+                    marker.on('click', function() {
+                        map.setView([place.lat, place.lng], 15, {
+                            animate: true,
+                            duration: 0.5
+                        });
+                    });
+                    
+                    // 加入圖層
+                    marker.addTo(markersLayer);
+                    currentMarkers.push(marker);
+                    
+                    // 如果只有一個結果,自動聚焦
+                    if (filteredPlaces.length === 1) {
+                        map.setView([place.lat, place.lng], 16, {
+                            animate: true,
+                            duration: 1
+                        });
+                        setTimeout(() => marker.openPopup(), 800);
+                    }
+                }, index * 100);
+            });
+
+            // 5. 如果有多個結果,調整地圖視野以包含所有標記
+            if (filteredPlaces.length > 1) {
+                setTimeout(() => {
+                    const bounds = L.latLngBounds(filteredPlaces.map(p => [p.lat, p.lng]));
+                    map.fitBounds(bounds, { 
+                        padding: [60, 60],
+                        maxZoom: 14,
+                        animate: true,
+                        duration: 0.8
+                    });
+                }, filteredPlaces.length * 100 + 200);
+            }
+        }
+
+        // 初始載入全部
+        setTimeout(() => {
+            filterMarkers('all');
+        }, 2500);
+
+        // --- 5. 更新計數器 ---
+        function updateCounts() {
+            const counts = {
+                all: places.length,
+                aesthetic: places.filter(p => p.category === 'aesthetic').length,
+                study: places.filter(p => p.category === 'study').length,
+                nerd: places.filter(p => p.category === 'nerd').length,
+                community: places.filter(p => p.category === 'community').length
+            };
+
+            Object.keys(counts).forEach(category => {
+                const badge = document.getElementById(`count-${category}`);
+                if (badge) {
+                    badge.textContent = counts[category];
+                }
+            });
+        }
+
+        // 初始化計數器
+        updateCounts();
+
+    </script>
+</body>
+</html>
